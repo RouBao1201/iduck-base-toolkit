@@ -1,0 +1,35 @@
+server:
+  port: 8099
+spring:
+  application:
+    name: iduck-base-toolkit
+  datasource:
+    druid:
+      username: root
+      password: root
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      url: jdbc:mysql://localhost:3306/storagecoms
+      initial-size: 10
+      max-active: 50
+      min-idle: 10
+      max-wait: 5000
+      query-timeout: 100
+      transaction-query-timeout: 100
+  redis:
+    # redis数据库索引(默认为0)，我们使用索引为3的数据库，避免和其他数据库冲突
+    database: 0
+    # redis服务器地址（默认为loaclhost）
+    host: localhost
+    # redis端口（默认为6379）
+    port: 6379
+    # redis访问密码（默认为空）
+    #    password: Ztesoft#2021
+    # redis连接超时时间（单位毫秒）
+    timeout: 20000
+    # redis连接池配置
+    jedis:
+      pool:
+        max-active: 8
+        max-idle: 8
+        min-idle: 0
+        max-wait: -1
