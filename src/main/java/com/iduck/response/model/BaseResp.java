@@ -1,5 +1,6 @@
 package com.iduck.response.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.iduck.page.model.BasePage;
 
 import java.io.Serializable;
@@ -18,6 +19,7 @@ public class BaseResp<T> implements Serializable {
 
     private String message;
 
+    @JsonFormat(pattern = "yyyyMMddHHmmss")
     private Date respTime;
 
     private BasePage pageInfo;
