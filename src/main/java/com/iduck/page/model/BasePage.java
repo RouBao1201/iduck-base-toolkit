@@ -1,12 +1,16 @@
 package com.iduck.page.model;
 
+import java.io.Serializable;
+
 /**
  * 基础分页对象
  *
  * @author songYanBin
  * @since 2022/11/24
  */
-public class BasePage {
+public class BasePage implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     private Integer pageNum;
 
     private Integer pageSize;

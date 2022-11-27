@@ -1,6 +1,7 @@
 package com.iduck.common.util;
 
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.context.ApplicationContext;
@@ -15,9 +16,10 @@ import java.util.Map;
  * @author songYanBin
  * @since 2022/10/28
  */
-@Slf4j
 @Component
 public class SpringContextHolder implements ApplicationContextAware {
+    private static final Logger log = LoggerFactory.getLogger(SpringContextHolder.class);
+
     private static ApplicationContext applicationContext;
 
     @Override

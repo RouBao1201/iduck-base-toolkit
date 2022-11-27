@@ -2,6 +2,7 @@ package com.iduck.response.model;
 
 import com.iduck.page.model.BasePage;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -10,7 +11,9 @@ import java.util.Date;
  * @author songYanBin
  * @since 2022/11/24
  */
-public class BaseResp<T> {
+public class BaseResp<T> implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     private String code;
 
     private String message;

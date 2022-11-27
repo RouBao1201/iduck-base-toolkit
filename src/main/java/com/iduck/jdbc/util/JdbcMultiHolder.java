@@ -7,7 +7,8 @@ import com.iduck.jdbc.config.DataSourceConfig;
 import com.iduck.jdbc.config.JdbcEnumConfig;
 import com.iduck.jdbc.config.JdbcPropConfig;
 import com.iduck.jdbc.config.SourceKey;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.util.ObjectUtils;
 
@@ -21,8 +22,9 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author songYanBin
  * @since 2022/11/21
  */
-@Slf4j
 public class JdbcMultiHolder {
+    private static final Logger log = LoggerFactory.getLogger(JdbcMultiHolder.class);
+
     private static final String ENUMS = "enums";
 
     private static final String PROPERTIES = "properties";

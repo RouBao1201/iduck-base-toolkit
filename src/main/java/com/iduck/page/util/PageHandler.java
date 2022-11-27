@@ -11,7 +11,8 @@ import com.iduck.request.model.BaseReq;
 import com.iduck.response.enuns.RespEnum;
 import com.iduck.page.model.BasePage;
 import com.iduck.response.model.BaseResp;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Date;
 import java.util.List;
@@ -22,8 +23,8 @@ import java.util.List;
  * @author songYanBin
  * @since 2022/11/24
  */
-@Slf4j
 public class PageHandler {
+    private static final Logger log = LoggerFactory.getLogger(PageHandler.class);
 
     /**
      * 分页查询
@@ -39,7 +40,7 @@ public class PageHandler {
         BasePage reqPage = req.getPageInfo();
         if (ObjUtil.isEmpty(reqPage)) {
             log.error("PageHandler => The request parameter[PageInfo] cannot be null.");
-            ExceptionHandler.push(RespEnum.FAIL.getCode(), RespEnum.FAIL.getMessage(), BusinessException.class);
+            ExceptionHandler.pushExc(RespEnum.FAIL.getCode(), RespEnum.FAIL.getMessage(), BusinessException.class);
         }
 
         // 执行分页查询mapper

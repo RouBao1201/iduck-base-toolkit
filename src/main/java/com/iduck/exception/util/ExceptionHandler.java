@@ -1,9 +1,12 @@
 package com.iduck.exception.util;
 
 import com.iduck.exception.enums.ExceptionEnum;
+import com.iduck.exception.model.AuthException;
 import com.iduck.exception.model.BaseException;
 import com.iduck.exception.model.BusinessException;
 import com.iduck.exception.model.ValidException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * 异常处理类
@@ -12,26 +15,54 @@ import com.iduck.exception.model.ValidException;
  * @since 2022/11/24
  */
 public class ExceptionHandler {
+    private static final Logger log = LoggerFactory.getLogger(ExceptionHandler.class);
 
     /**
      * 抛出参数校验异常
      */
-    public static void pushValid() {
-        push(ExceptionEnum.VALID_EXCEPTION.getCode(), ExceptionEnum.VALID_EXCEPTION.getMessage(), ValidException.class);
+    public static void pushValidExc() {
+        pushExc(ExceptionEnum.VALID_EXCEPTION.getCode(), ExceptionEnum.VALID_EXCEPTION.getMessage(), ValidException.class);
+    }
+
+    /**
+     * 抛出参数校验异常
+     *
+     * @param message 异常信息
+     */
+    public static void pushValidExc(String message) {
+        pushExc(ExceptionEnum.VALID_EXCEPTION.getCode(), message, ValidException.class);
     }
 
     /**
      * 抛出业务异常
      */
-    public static void pushBusiness() {
-        push(ExceptionEnum.BUSI_EXCEPTION.getCode(), ExceptionEnum.BUSI_EXCEPTION.getMessage(), BusinessException.class);
+    public static void pushBusinessExc() {
+        pushExc(ExceptionEnum.BUSI_EXCEPTION.getCode(), ExceptionEnum.BUSI_EXCEPTION.getMessage(), BusinessException.class);
+    }
+
+    /**
+     * 抛出业务异常
+     *
+     * @param message 异常信息
+     */
+    public static void pushBusinessExc(String message) {
+        pushExc(ExceptionEnum.BUSI_EXCEPTION.getCode(), message, BusinessException.class);
     }
 
     /**
      * 抛出权限异常
      */
-    public static void pushAuth() {
-        push(ExceptionEnum.AUTH_EXCEPTION.getCode(), ExceptionEnum.AUTH_EXCEPTION.getMessage(), BusinessException.class);
+    public static void pushAuthExc() {
+        pushExc(ExceptionEnum.AUTH_EXCEPTION.getCode(), ExceptionEnum.AUTH_EXCEPTION.getMessage(), BusinessException.class);
+    }
+
+    /**
+     * 抛出权限异常
+     *
+     * @param message 异常信息
+     */
+    public static void pushAuthExc(String message) {
+        pushExc(ExceptionEnum.AUTH_EXCEPTION.getCode(), message, AuthException.class);
     }
 
     /**
@@ -42,7 +73,7 @@ public class ExceptionHandler {
      * @param clazz    异常类class
      * @param <T>      异常类 extends BaseException
      */
-    public static <T extends BaseException> void push(String code, String localMsg, Class<T> clazz) {
+    public static <T extends BaseException> void pushExc(String code, String localMsg, Class<T> clazz) {
         T instance = instance(clazz);
         instance.setCode(code);
         instance.setLocalMsg(localMsg);
@@ -61,6 +92,7 @@ public class ExceptionHandler {
         try {
             t = clazz.newInstance();
         } catch (InstantiationException | IllegalAccessException e) {
+            log.error("ExceptionHandler => Instance error. init baseException to default.");
             return (T) new BaseException();
         }
         return t;
