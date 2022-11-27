@@ -25,6 +25,18 @@ public class RespBuilder {
     }
 
     /**
+     * 成功响应
+     *
+     * @param message 响应信息
+     * @param data    响应数据
+     * @param <T>     响应数据枚举类型
+     * @return BaseResp
+     */
+    public static <T> BaseResp<T> success(String message, T data) {
+        return build(RespEnum.SUCCESS.getCode(), message, data);
+    }
+
+    /**
      * 失败响应
      *
      * @param data 响应数据
@@ -36,6 +48,18 @@ public class RespBuilder {
     }
 
     /**
+     * 失败响应
+     *
+     * @param message 响应信息
+     * @param data    响应数据
+     * @param <T>     响应数据枚举类型
+     * @return BaseResp
+     */
+    public static <T> BaseResp<T> fail(String message, T data) {
+        return build(RespEnum.FAIL.getCode(), message, data);
+    }
+
+    /**
      * 异常响应
      *
      * @param data 响应数据
@@ -44,6 +68,18 @@ public class RespBuilder {
      */
     public static <T> BaseResp<T> error(T data) {
         return build(RespEnum.ERROR.getCode(), RespEnum.ERROR.getMessage(), data);
+    }
+
+    /**
+     * 异常响应
+     *
+     * @param message 响应信息
+     * @param data    响应数据
+     * @param <T>     响应数据枚举类型
+     * @return BaseResp
+     */
+    public static <T> BaseResp<T> error(String message, T data) {
+        return build(RespEnum.ERROR.getCode(), message, data);
     }
 
     /**
