@@ -11,13 +11,13 @@ import org.springframework.stereotype.Component;
  **/
 @Component
 public class CipherConfig {
-    @Value("${cipher.config.aes-key:r9XMC8xq2XoN/Vni5m/xVQ==}")
+    @Value("${cipher.config.secret-key.aes-key:r9XMC8xq2XoN/Vni5m/xVQ==}")
     private String aesKey;
 
-    @Value("${cipher.config.md5-salt:iduck-md5-salt}")
+    @Value("${cipher.config.secret-key.md5-salt:iduck-md5-salt}")
     private String md5Salt;
 
-    @Value("${cipher.config.rsa-key:iduck-rsa-key}")
+    @Value("${cipher.config.secret-key.rsa-key:iduck-rsa-key}")
     private String rsaKey;
 
     public String getAesKey() {

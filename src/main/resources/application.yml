@@ -33,3 +33,15 @@ spring:
         max-idle: 8
         min-idle: 0
         max-wait: -1
+# jwt配置类
+jwt:
+  config:
+    secret-key: jwt-secret-iduck
+    expire-time: 0
+# 加密工具配置
+cipher:
+  config:
+    secret-key:
+      aes-key: r9XMC8xq2XoN/Vni5m/xVQ==
+      md5-salt: iduck-md5-salt
+      rsa-key: iduck-rsa-key
