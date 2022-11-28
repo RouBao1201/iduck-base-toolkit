@@ -7,7 +7,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.crypto.Cipher;
+import javax.crypto.KeyGenerator;
+import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
+import java.nio.charset.StandardCharsets;
+import java.security.NoSuchAlgorithmException;
 
 /**
  * AES加解密工具类
@@ -20,7 +24,30 @@ public class AESUtils {
 
     private final String key;
 
-    private static final String AES = "AES";
+    /**
+     * AES密钥标识
+     */
+    private static final String SIGN_AES = "AES";
+
+    /**
+     * 密码器AES模式
+     */
+    private static final String CIPHER_AES = "AES/ECB/PKCS5Padding";
+
+    /**
+     * 密钥长度128
+     */
+    public static final int KEY_SIZE_128_LENGTH = 128;
+
+    /**
+     * 密钥长度192
+     */
+    public static final int KEY_SIZE_192_LENGTH = 192;
+
+    /**
+     * 密钥长度256
+     */
+    public static final int KEY_SIZE_256_LENGTH = 256;
 
     /**
      * 加密
@@ -65,7 +92,9 @@ public class AESUtils {
      * @return 校验结果
      */
     public boolean verify(String cipherStr, String clearStr, String key) {
-        if (StrUtil.isEmpty(cipherStr) || StrUtil.isEmpty(clearStr)) {
+        if (StrUtil.isEmpty(cipherStr)
+                || StrUtil.isEmpty(clearStr)
+                || StrUtil.isEmpty(key)) {
             return false;
         }
         return clearStr.equals(decrypt(cipherStr, key));
@@ -79,17 +108,17 @@ public class AESUtils {
      * @return 密文
      */
     public String encrypt(String clearStr, String key) {
-        if (StrUtil.isEmpty(clearStr) || StrUtil.isEmpty(key) || key.length() != NumberConst.SIXTEEN) {
-            log.error("AESUtils => Encrypt str cannot be empty and the key length must be 16.");
-            return "";
-        }
-        byte[] raw = key.getBytes();
-        SecretKeySpec secretKeySpec = new SecretKeySpec(raw, AES);
+//        if (StrUtil.isEmpty(clearStr) || StrUtil.isEmpty(key) || key.length() != NumberConst.SIXTEEN) {
+//            log.error("AESUtils => Encrypt str cannot be empty and the key length must be 16.");
+//            return "";
+//        }
+        byte[] decodedKey = Base64.decodeBase64(key.getBytes(StandardCharsets.UTF_8));
+        SecretKeySpec secretKeySpec = new SecretKeySpec(decodedKey, SIGN_AES);
         byte[] encrypted = new byte[0];
         try {
-            Cipher cipher = Cipher.getInstance(AES);
+            Cipher cipher = Cipher.getInstance(CIPHER_AES);
             cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec);
-            encrypted = cipher.doFinal(clearStr.getBytes());
+            encrypted = cipher.doFinal(clearStr.getBytes(StandardCharsets.UTF_8));
         } catch (Exception e) {
             log.error("AESUtils => Encrypt error.ErrorMessage:{}", e.getMessage());
         }
@@ -104,22 +133,41 @@ public class AESUtils {
      * @return 明文
      */
     public String decrypt(String cipherStr, String key) {
-        if (StrUtil.isEmpty(cipherStr) || StrUtil.isEmpty(key) || key.length() != NumberConst.SIXTEEN) {
-            log.error("AESUtils => Encrypt str cannot be empty and the key length must be 16.");
-            return "";
-        }
-        byte[] raw = key.getBytes();
-        SecretKeySpec secretKeySpec = new SecretKeySpec(raw, AES);
+//        if (StrUtil.isEmpty(cipherStr) || StrUtil.isEmpty(key) || key.length() != NumberConst.SIXTEEN) {
+//            log.error("AESUtils => Encrypt str cannot be empty and the key length must be 16.");
+//            return "";
+//        }
+        byte[] decodedKey = Base64.decodeBase64(key.getBytes(StandardCharsets.UTF_8));
+        SecretKeySpec secretKeySpec = new SecretKeySpec(decodedKey, SIGN_AES);
         byte[] original = new byte[0];
         try {
-            Cipher cipher = Cipher.getInstance(AES);
+            Cipher cipher = Cipher.getInstance(CIPHER_AES);
             cipher.init(Cipher.DECRYPT_MODE, secretKeySpec);
-            byte[] decodeBase64 = Base64.decodeBase64(cipherStr);
-            original = cipher.doFinal(decodeBase64);
+            original = cipher.doFinal(Base64.decodeBase64(cipherStr));
         } catch (Exception e) {
             log.error("AESUtils => Decrypt error. ErrorMessage:{}", e.getMessage());
         }
-        return new String(original);
+        return new String(original, StandardCharsets.UTF_8);
+    }
+
+    /**
+     * 生成密钥,长度:128/192/256
+     *
+     * @param keySize 密钥长度
+     * @return 密钥
+     */
+    public String generateSecretKey(int keySize) {
+        KeyGenerator keyGenerator = null;
+        try {
+            keyGenerator = KeyGenerator.getInstance(SIGN_AES);
+        } catch (NoSuchAlgorithmException e) {
+            log.error("AESUtils => GenerateSecretKey error. ErrorMessage:{}", e.getMessage());
+            return "";
+        }
+        keyGenerator.init(keySize);
+        SecretKey secretKey = keyGenerator.generateKey();
+        byte[] keyBytes = secretKey.getEncoded();
+        return new String(Base64.encodeBase64(keyBytes), StandardCharsets.UTF_8);
     }
 
     public AESUtils(String key) {

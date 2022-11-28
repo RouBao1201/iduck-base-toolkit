@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
  **/
 @Component
 public class CipherConfig {
-    @Value("${cipher.config.aes-key:jTfkRfOYB/QDbbKK}")
+    @Value("${cipher.config.aes-key:r9XMC8xq2XoN/Vni5m/xVQ==}")
     private String aesKey;
 
     @Value("${cipher.config.md5-salt:iduck-md5-salt}")
