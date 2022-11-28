@@ -1,6 +1,7 @@
 package com.iduck.response.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.iduck.page.model.BasePage;
 
 import java.io.Serializable;
@@ -25,6 +26,9 @@ public class BaseResp<T> implements Serializable {
     private BasePage pageInfo;
 
     private T data;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private String throwErrorMsg;
 
     public String getCode() {
         return code;
@@ -66,6 +70,14 @@ public class BaseResp<T> implements Serializable {
         this.data = data;
     }
 
+    public String getThrowErrorMsg() {
+        return throwErrorMsg;
+    }
+
+    public void setThrowErrorMsg(String throwErrorMsg) {
+        this.throwErrorMsg = throwErrorMsg;
+    }
+
     @Override
     public String toString() {
         return "BaseResp{" +
@@ -74,6 +86,7 @@ public class BaseResp<T> implements Serializable {
                 ", respTime=" + respTime +
                 ", pageInfo=" + pageInfo +
                 ", data=" + data +
+                ", throwErrorMsg='" + throwErrorMsg + '\'' +
                 '}';
     }
 }
