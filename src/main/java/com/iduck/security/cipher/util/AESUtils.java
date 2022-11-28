@@ -1,7 +1,6 @@
 package com.iduck.security.cipher.util;
 
 import cn.hutool.core.util.StrUtil;
-import com.iduck.common.constant.NumberConst;
 import org.apache.commons.codec.binary.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -108,10 +107,6 @@ public class AESUtils {
      * @return 密文
      */
     public String encrypt(String clearStr, String key) {
-//        if (StrUtil.isEmpty(clearStr) || StrUtil.isEmpty(key) || key.length() != NumberConst.SIXTEEN) {
-//            log.error("AESUtils => Encrypt str cannot be empty and the key length must be 16.");
-//            return "";
-//        }
         byte[] decodedKey = Base64.decodeBase64(key.getBytes(StandardCharsets.UTF_8));
         SecretKeySpec secretKeySpec = new SecretKeySpec(decodedKey, SIGN_AES);
         byte[] encrypted = new byte[0];
@@ -133,10 +128,6 @@ public class AESUtils {
      * @return 明文
      */
     public String decrypt(String cipherStr, String key) {
-//        if (StrUtil.isEmpty(cipherStr) || StrUtil.isEmpty(key) || key.length() != NumberConst.SIXTEEN) {
-//            log.error("AESUtils => Encrypt str cannot be empty and the key length must be 16.");
-//            return "";
-//        }
         byte[] decodedKey = Base64.decodeBase64(key.getBytes(StandardCharsets.UTF_8));
         SecretKeySpec secretKeySpec = new SecretKeySpec(decodedKey, SIGN_AES);
         byte[] original = new byte[0];
