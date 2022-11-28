@@ -12,7 +12,9 @@ public enum ExceptionEnum {
 
     BUSI_EXCEPTION("814500", "业务异常"),
 
-    AUTH_EXCEPTION("814501", "鉴权异常");
+    AUTH_EXCEPTION("814501", "鉴权异常"),
+
+    SECURITY_EXCEPTION("814502", "安全异常");
 
     private String code;
 

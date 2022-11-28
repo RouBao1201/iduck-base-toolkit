@@ -1,5 +1,5 @@
 server:
-  port: 8099
+  port: 8098
 spring:
   application:
     name: iduck-base-toolkit
@@ -9,8 +9,8 @@ spring:
       password: root
       driver-class-name: com.mysql.cj.jdbc.Driver
       url: jdbc:mysql://localhost:3306/storagecoms
-      initial-size: 10
-      max-active: 50
+      initial-size: 2
+      max-active: 10
       min-idle: 10
       max-wait: 5000
       query-timeout: 100

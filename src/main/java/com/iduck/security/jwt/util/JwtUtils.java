@@ -1,9 +1,9 @@
-package com.iduck.security.util;
+package com.iduck.security.jwt.util;
 
 import cn.hutool.core.util.ObjUtil;
 import cn.hutool.core.util.StrUtil;
 import com.iduck.common.util.SpringContextHolder;
-import com.iduck.security.config.JwtConfig;
+import com.iduck.security.jwt.config.JwtConfig;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;

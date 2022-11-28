@@ -62,6 +62,11 @@ public class NumberConst {
     public static final int TEN = 10;
 
     /**
+     * 常量16
+     */
+    public static final int SIXTEEN = 16;
+
+    /**
      * 常量999
      */
     public static final int NINE_HUNDRED_AND_NINETY_NINE = 999;

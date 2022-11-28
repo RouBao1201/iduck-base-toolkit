@@ -4,6 +4,7 @@ import com.iduck.exception.enums.ExceptionEnum;
 import com.iduck.exception.model.AuthException;
 import com.iduck.exception.model.BaseException;
 import com.iduck.exception.model.BusinessException;
+import com.iduck.exception.model.SecurityException;
 import com.iduck.exception.model.ValidException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -63,6 +64,22 @@ public class ExceptionHandler {
      */
     public static void pushAuthExc(String message) {
         pushExc(ExceptionEnum.AUTH_EXCEPTION.getCode(), message, AuthException.class);
+    }
+
+    /**
+     * 抛出安全异常
+     */
+    public static void pushSecurityExc() {
+        pushExc(ExceptionEnum.SECURITY_EXCEPTION.getCode(), ExceptionEnum.SECURITY_EXCEPTION.getMessage(), SecurityException.class);
+    }
+
+    /**
+     * 抛出安全异常
+     *
+     * @param message 异常信息
+     */
+    public static void pushSecurityExc(String message) {
+        pushExc(ExceptionEnum.SECURITY_EXCEPTION.getCode(), message, SecurityException.class);
     }
 
     /**
