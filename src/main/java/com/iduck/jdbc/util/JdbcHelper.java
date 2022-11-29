@@ -1,10 +1,14 @@
 package com.iduck.jdbc.util;
 
 import com.iduck.common.constant.NumberConst;
-import com.iduck.common.util.SpringContextHolder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -17,7 +21,22 @@ import java.util.function.Consumer;
  * @author songYanBin
  * @since 2022/11/23
  */
+@Component
 public class JdbcHelper {
+    private static final Logger log = LoggerFactory.getLogger(JdbcHelper.class);
+
+    private static JdbcHelper jdbcHelper;
+
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
+
+    @PostConstruct
+    public void init() {
+        log.info("JdbcHelper => PostConstruct init...");
+        jdbcHelper = this;
+        jdbcHelper.jdbcTemplate = this.jdbcTemplate;
+    }
+
     /**
      * 分段提交默认数量
      */
@@ -34,7 +53,7 @@ public class JdbcHelper {
     public static <T> void batchInsert(String sql,
                                        List<T> dataList,
                                        DiInjectConsumer<PreparedStatement, Integer, List<T>> consumer) {
-        batchUpdate(SpringContextHolder.getBean(JdbcTemplate.class), sql, dataList, DEFAULT_SIZE, consumer);
+        batchUpdate(jdbcHelper.jdbcTemplate, sql, dataList, DEFAULT_SIZE, consumer);
     }
 
     /**
@@ -48,7 +67,7 @@ public class JdbcHelper {
     public static <T> void batchUpdate(String sql,
                                        List<T> dataList,
                                        DiInjectConsumer<PreparedStatement, Integer, List<T>> consumer) {
-        batchUpdate(SpringContextHolder.getBean(JdbcTemplate.class), sql, dataList, DEFAULT_SIZE, consumer);
+        batchUpdate(jdbcHelper.jdbcTemplate, sql, dataList, DEFAULT_SIZE, consumer);
     }
 
     /**

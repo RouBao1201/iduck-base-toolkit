@@ -12,9 +12,11 @@ import com.iduck.jdbc.config.JdbcSourcePropConfig;
 import com.iduck.jdbc.service.MultiDatasourceService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.util.ObjectUtils;
+import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -25,6 +27,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author songYanBin
  * @since 2022/11/21
  */
+@Component
 public class JdbcMultiHolder {
     private static final Logger log = LoggerFactory.getLogger(JdbcMultiHolder.class);
 
@@ -37,15 +40,23 @@ public class JdbcMultiHolder {
     /**
      * JdbcTemplate集合【多数据源】
      */
-    private static final Map<String, JdbcTemplate> JDBC_MAP;
+    private static final Map<String, JdbcTemplate> JDBC_MAP = new ConcurrentHashMap<>();
 
-    private static final JdbcSourcePropConfig JDBC_CONFIG;
+    private static JdbcMultiHolder jdbcMultiHolder;
 
-    static {
-        log.info("JdbcMultiHolder => The multi-datasource initialization starts.");
-        JDBC_MAP = new ConcurrentHashMap<>();
-        JDBC_CONFIG = SpringContextHolder.getBean(JdbcSourcePropConfig.class);
-        init();
+    @Autowired
+    private JdbcTemplate defaultJdbcTemplate;
+
+    @Autowired
+    private JdbcSourcePropConfig config;
+
+    @PostConstruct
+    public void init() {
+        log.info("JdbcMultiHolder => PostConstruct init...");
+        jdbcMultiHolder = this;
+        jdbcMultiHolder.defaultJdbcTemplate = this.defaultJdbcTemplate;
+        jdbcMultiHolder.config = this.config;
+        initTemplate();
     }
 
     /**
@@ -79,17 +90,13 @@ public class JdbcMultiHolder {
     /**
      * 初始化数据连接,创建JdbcTemplate
      */
-    private static void init() {
+    private void initTemplate() {
         // 注册默认的JdbcTemplate
-        JdbcTemplate bean = SpringContextHolder.getBean(JdbcTemplate.class);
-        if (!ObjectUtils.isEmpty(bean)) {
-            log.info("JdbcMultiHolder ==> Load the Spring configuration datasource as the default.");
-            JDBC_MAP.put(DEFAULT_DATASOURCE, bean);
-        }
+        JDBC_MAP.put(DEFAULT_DATASOURCE, jdbcMultiHolder.defaultJdbcTemplate);
 
         // 注册剩余的数据源连接
-        log.info("JdbcMultiHolder ==> Initialize the data source mode to:[{}]", JDBC_CONFIG.getType());
-        switch (JDBC_CONFIG.getType()) {
+        log.info("JdbcMultiHolder ==> Initialize the data source mode to:[{}]", jdbcMultiHolder.config.getType());
+        switch (jdbcMultiHolder.config.getType()) {
             case SERVICE_IMPL:
                 initByServiceImpl();
                 break;
@@ -105,7 +112,7 @@ public class JdbcMultiHolder {
      * 创建多数据源连接【by Properties】
      */
     private static void initByProperties() {
-        Map<String, DataSourceConfig> configMap = JDBC_CONFIG.getConfig();
+        Map<String, DataSourceConfig> configMap = jdbcMultiHolder.config.getConfig();
         if (CollectionUtil.isEmpty(configMap)) {
             return;
         }
@@ -119,7 +126,13 @@ public class JdbcMultiHolder {
      * 创建多数据源连接【by Bean】
      */
     private static void initByServiceImpl() {
-        MultiDatasourceService bean = SpringContextHolder.getBean(MultiDatasourceService.class);
+        MultiDatasourceService bean = SpringContextHolder.getBean(MultiDatasourceService.class, true);
+
+        // 判断用户是否实现MultiDatasourceService接口
+        if (ObjUtil.isNull(bean)) {
+            log.error("JdbcMultiHolder =>Init Multi datasource[type:service] fail. If not implements interface[MultiDatasourceService]. Please change config[multi.datasource.type] to 'properties'.");
+            return;
+        }
         bean.getDatasourceConfig().forEach(JdbcMultiHolder::initJdbcTemplate);
     }
 
@@ -143,13 +156,10 @@ public class JdbcMultiHolder {
      */
     private static DataSource getDataSource(DataSourceConfig config) {
         DruidDataSource datasource = new DruidDataSource();
-        if (ObjUtil.isEmpty(config)
-                || ObjUtil.isEmpty(config.getKey())
-                || ObjUtil.isEmpty(config.getDriverClassName())
-                || ObjUtil.isEmpty(config.getUrl())
-                || ObjUtil.isEmpty(config.getUsername())
-                || ObjUtil.isEmpty(config.getPassword())) {
-            ExceptionHandler.pushExc("500", "Datasouece init error.", BaseException.class);
+        if (ObjUtil.isEmpty(config) || ObjUtil.isEmpty(config.getKey())
+                || ObjUtil.isEmpty(config.getDriverClassName()) || ObjUtil.isEmpty(config.getUrl())
+                || ObjUtil.isEmpty(config.getUsername()) || ObjUtil.isEmpty(config.getPassword())) {
+            ExceptionHandler.pushExc("500", "Datasource init error.", BaseException.class);
         }
         datasource.setDriverClassName(config.getDriverClassName());
         datasource.setUrl(config.getUrl());

@@ -2,14 +2,16 @@ package com.iduck.security.jwt.util;
 
 import cn.hutool.core.util.ObjUtil;
 import cn.hutool.core.util.StrUtil;
-import com.iduck.common.util.SpringContextHolder;
 import com.iduck.security.jwt.config.JwtConfig;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -20,18 +22,20 @@ import java.util.Map;
  * @author SongYanBin
  * @since 2022/11/27
  **/
+@Component
 public class JwtUtils {
     private static final Logger log = LoggerFactory.getLogger(JwtUtils.class);
 
-    /**
-     * 配置类
-     * 默认[secretKey:jwt-secret-iduck]、[expireTime:0]
-     */
-    private static final JwtConfig JWT_CONFIG;
+    private static JwtUtils jwtUtils;
 
-    static {
-        JWT_CONFIG = SpringContextHolder.getBean(JwtConfig.class);
-        log.info("JwtUtils => Jwt config init:[{}]", JWT_CONFIG);
+    @Autowired
+    private JwtConfig config;
+
+    @PostConstruct
+    public void init() {
+        log.info("JwtUtils => PostConstruct init...");
+        jwtUtils = this;
+        jwtUtils.config = this.config;
     }
 
     /**
@@ -46,7 +50,7 @@ public class JwtUtils {
         }
 
         try {
-            Jwts.parser().setSigningKey(JWT_CONFIG.getSecretKey()).parseClaimsJws(token);
+            Jwts.parser().setSigningKey(jwtUtils.config.getSecretKey()).parseClaimsJws(token);
         } catch (Exception e) {
             return false;
         }
@@ -65,9 +69,9 @@ public class JwtUtils {
                 .setHeaderParam("alg", "HS2256")
                 .setSubject("iduck-user")
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + JWT_CONFIG.getExpireTime()))
+                .setExpiration(new Date(System.currentTimeMillis() + jwtUtils.config.getExpireTime()))
                 .setClaims(claims)
-                .signWith(SignatureAlgorithm.HS256, JWT_CONFIG.getSecretKey())
+                .signWith(SignatureAlgorithm.HS256, jwtUtils.config.getSecretKey())
                 .compact();
     }
 
@@ -93,7 +97,7 @@ public class JwtUtils {
         Claims body = null;
         try {
             body = Jwts.parser()
-                    .setSigningKey(JWT_CONFIG.getSecretKey())
+                    .setSigningKey(jwtUtils.config.getSecretKey())
                     .parseClaimsJws(token)
                     .getBody();
         } catch (Exception e) {
