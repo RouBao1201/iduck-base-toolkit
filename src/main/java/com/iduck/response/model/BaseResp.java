@@ -23,6 +23,7 @@ public class BaseResp<T> implements Serializable {
     @JsonFormat(pattern = "yyyyMMddHHmmss")
     private Date respTime;
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private BasePage pageInfo;
 
     private T data;

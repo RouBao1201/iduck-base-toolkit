@@ -16,7 +16,7 @@ import java.util.Map;
 @ConfigurationProperties(prefix = "multi.datasource")
 public class JdbcPropConfig {
 
-    @Value("${multi.datasource.type:enums}")
+    @Value("${multi.datasource.type:properties}")
     private String type;
 
     private Map<String, DataSourceConfig> config;

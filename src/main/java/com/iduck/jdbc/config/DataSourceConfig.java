@@ -20,17 +20,17 @@ public class DataSourceConfig {
 
     private String type;
 
-    private int initialSize;
+    private Integer initialSize;
 
-    private int maxActive;
+    private Integer maxActive;
 
-    private int minIdle;
+    private Integer minIdle;
 
-    private int maxWait;
+    private Integer maxWait;
 
-    private int queryTimeout;
+    private Integer queryTimeout;
 
-    private int transactionTimeout;
+    private Integer transactionTimeout;
 
     public String getKey() {
         return key;
@@ -80,51 +80,51 @@ public class DataSourceConfig {
         this.type = type;
     }
 
-    public int getInitialSize() {
+    public Integer getInitialSize() {
         return initialSize;
     }
 
-    public void setInitialSize(int initialSize) {
+    public void setInitialSize(Integer initialSize) {
         this.initialSize = initialSize;
     }
 
-    public int getMaxActive() {
+    public Integer getMaxActive() {
         return maxActive;
     }
 
-    public void setMaxActive(int maxActive) {
+    public void setMaxActive(Integer maxActive) {
         this.maxActive = maxActive;
     }
 
-    public int getMinIdle() {
+    public Integer getMinIdle() {
         return minIdle;
     }
 
-    public void setMinIdle(int minIdle) {
+    public void setMinIdle(Integer minIdle) {
         this.minIdle = minIdle;
     }
 
-    public int getMaxWait() {
+    public Integer getMaxWait() {
         return maxWait;
     }
 
-    public void setMaxWait(int maxWait) {
+    public void setMaxWait(Integer maxWait) {
         this.maxWait = maxWait;
     }
 
-    public int getQueryTimeout() {
+    public Integer getQueryTimeout() {
         return queryTimeout;
     }
 
-    public void setQueryTimeout(int queryTimeout) {
+    public void setQueryTimeout(Integer queryTimeout) {
         this.queryTimeout = queryTimeout;
     }
 
-    public int getTransactionTimeout() {
+    public Integer getTransactionTimeout() {
         return transactionTimeout;
     }
 
-    public void setTransactionTimeout(int transactionTimeout) {
+    public void setTransactionTimeout(Integer transactionTimeout) {
         this.transactionTimeout = transactionTimeout;
     }
 
