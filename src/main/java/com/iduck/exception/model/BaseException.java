@@ -1,6 +1,6 @@
 package com.iduck.exception.model;
 
-import com.iduck.common.constant.SymbolConst;
+import cn.hutool.core.util.StrUtil;
 
 /**
  * 基础异常类
@@ -29,13 +29,13 @@ public class BaseException extends RuntimeException {
 
     @Override
     public String getMessage() {
-        return getCode()
-                + SymbolConst.HORIZONTAL_LINE
-                + "自定义错误信息："
-                + getLocalMsg()
-                + System.lineSeparator()
-                + "详细错误："
-                + super.getMessage();
+        String resultStr = "CustomErrorMessage: [" + getCode() + "-" + getLocalMsg() + "]" + System.lineSeparator();
+
+        // 避免自定义异常抛出时,super.getMessage()无数据,造成打印显示null（误导）
+        if (StrUtil.isNotEmpty(super.getMessage())) {
+            resultStr += "ErrorMessageDetail: [" + super.getMessage() + "]";
+        }
+        return resultStr;
     }
 
     public String getCode() {

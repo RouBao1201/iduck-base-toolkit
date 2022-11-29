@@ -17,6 +17,26 @@ public class SymbolConst {
      */
     public static final String SLANT_BAR = "/";
 
+    /**
+     * 空格
+     */
+    public static final String BLANK_SPACE = " ";
+
+    /**
+     * 空格横杠空格
+     */
+    public static final String BLANK_HORIZONTAL_LINE_BLANK = " - ";
+
+    /**
+     * 左中括号
+     */
+    public static final String LEFT_SQUARE_BRACKETS = "[";
+
+    /**
+     * 右中括号
+     */
+    public static final String RIGHT_SQUARE_BRACKETS = "]";
+
     private SymbolConst() {
     }
 }
