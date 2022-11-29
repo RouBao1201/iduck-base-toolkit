@@ -1,12 +1,15 @@
 package com.iduck.jdbc.util;
 
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.util.ObjUtil;
 import com.alibaba.druid.pool.DruidDataSource;
+import com.iduck.common.constant.NumberConst;
 import com.iduck.common.util.SpringContextHolder;
+import com.iduck.exception.model.BaseException;
+import com.iduck.exception.util.ExceptionHandler;
 import com.iduck.jdbc.config.DataSourceConfig;
-import com.iduck.jdbc.config.JdbcEnumConfig;
-import com.iduck.jdbc.config.JdbcPropConfig;
-import com.iduck.jdbc.config.SourceKey;
+import com.iduck.jdbc.config.JdbcSourcePropConfig;
+import com.iduck.jdbc.service.MultiDatasourceService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -25,21 +28,23 @@ import java.util.concurrent.ConcurrentHashMap;
 public class JdbcMultiHolder {
     private static final Logger log = LoggerFactory.getLogger(JdbcMultiHolder.class);
 
-    private static final String ENUMS = "enums";
+    private static final String SERVICE_IMPL = "service";
 
     private static final String PROPERTIES = "properties";
+
+    private static final String DEFAULT_DATASOURCE = "DEFAULT-DATASOURCE";
 
     /**
      * JdbcTemplate集合【多数据源】
      */
     private static final Map<String, JdbcTemplate> JDBC_MAP;
 
-    private static final JdbcPropConfig JDBC_CONFIG;
+    private static final JdbcSourcePropConfig JDBC_CONFIG;
 
     static {
         log.info("JdbcMultiHolder => The multi-datasource initialization starts.");
         JDBC_MAP = new ConcurrentHashMap<>();
-        JDBC_CONFIG = SpringContextHolder.getBean(JdbcPropConfig.class);
+        JDBC_CONFIG = SpringContextHolder.getBean(JdbcSourcePropConfig.class);
         init();
     }
 
@@ -49,10 +54,7 @@ public class JdbcMultiHolder {
      * @return JdbcTemplate
      */
     public static JdbcTemplate getDefault() {
-        if (PROPERTIES.equals(JDBC_CONFIG.getType())) {
-            return JDBC_MAP.get(SourceKey.Properties.DEFAULT_DATASOURCE);
-        }
-        return JDBC_MAP.get(SourceKey.Enums.DEFAULT_DATASOURCE);
+        return JDBC_MAP.get(DEFAULT_DATASOURCE);
     }
 
     /**
@@ -79,25 +81,17 @@ public class JdbcMultiHolder {
      */
     private static void init() {
         // 注册默认的JdbcTemplate
-        JdbcTemplate bean = SpringContextHolder.getBean(JdbcTemplate.class, true);
+        JdbcTemplate bean = SpringContextHolder.getBean(JdbcTemplate.class);
         if (!ObjectUtils.isEmpty(bean)) {
             log.info("JdbcMultiHolder ==> Load the Spring configuration datasource as the default.");
-            JDBC_MAP.put(SourceKey.Properties.DEFAULT_DATASOURCE, bean);
-        } else {
-            if (ENUMS.equals(JDBC_CONFIG.getType())) {
-                log.info("JdbcMultiHolder ==> Load enum [{}] as default datasource.", JdbcEnumConfig.DEFAULT_DATASOURCE.getKey());
-                initJdbcTemplate(transAllToConfig(JdbcEnumConfig.DEFAULT_DATASOURCE));
-            } else if (PROPERTIES.equals(JDBC_CONFIG.getType())) {
-                log.info("JdbcMultiHolder ==> Load configuration [{}] as default datasource.", SourceKey.Properties.DEFAULT_DATASOURCE);
-                initJdbcTemplate(JDBC_CONFIG.getConfig().get(SourceKey.Properties.DEFAULT_DATASOURCE));
-            }
+            JDBC_MAP.put(DEFAULT_DATASOURCE, bean);
         }
 
         // 注册剩余的数据源连接
         log.info("JdbcMultiHolder ==> Initialize the data source mode to:[{}]", JDBC_CONFIG.getType());
         switch (JDBC_CONFIG.getType()) {
-            case ENUMS:
-                initByEnums();
+            case SERVICE_IMPL:
+                initByServiceImpl();
                 break;
             case PROPERTIES:
                 initByProperties();
@@ -116,21 +110,17 @@ public class JdbcMultiHolder {
             return;
         }
         configMap.forEach((key, config) -> {
-            if (!SourceKey.Properties.DEFAULT_DATASOURCE.equals(key)) {
-                config.setKey(key);
-                initJdbcTemplate(config);
-            }
+            config.setKey(key);
+            initJdbcTemplate(config);
         });
     }
 
     /**
-     * 创建多数据源连接【by Enums】
+     * 创建多数据源连接【by Bean】
      */
-    private static void initByEnums() {
-        JdbcEnumConfig.ALL_LIST.forEach(it -> {
-            DataSourceConfig dataSourceConfig = transAllToConfig(it);
-            initJdbcTemplate(dataSourceConfig);
-        });
+    private static void initByServiceImpl() {
+        MultiDatasourceService bean = SpringContextHolder.getBean(MultiDatasourceService.class);
+        bean.getDatasourceConfig().forEach(JdbcMultiHolder::initJdbcTemplate);
     }
 
     /**
@@ -146,29 +136,6 @@ public class JdbcMultiHolder {
     }
 
     /**
-     * 将枚举转为DataSourceConfig对象
-     *
-     * @param jdbcEnum jdbcEnum
-     * @return DataSourceConfig
-     */
-    private static DataSourceConfig transAllToConfig(JdbcEnumConfig jdbcEnum) {
-        DataSourceConfig dataSourceConfig = new DataSourceConfig();
-        dataSourceConfig.setKey(jdbcEnum.getKey());
-        dataSourceConfig.setUsername(jdbcEnum.getUsername());
-        dataSourceConfig.setPassword(jdbcEnum.getPassword());
-        dataSourceConfig.setDriver(jdbcEnum.getDriver());
-        dataSourceConfig.setUrl(jdbcEnum.getUrl());
-        dataSourceConfig.setType(jdbcEnum.getType());
-        dataSourceConfig.setInitialSize(jdbcEnum.getInitialSize());
-        dataSourceConfig.setMaxActive(jdbcEnum.getMaxActive());
-        dataSourceConfig.setMinIdle(jdbcEnum.getMinIdle());
-        dataSourceConfig.setMaxWait(jdbcEnum.getMaxWait());
-        dataSourceConfig.setQueryTimeout(jdbcEnum.getQueryTimeout());
-        dataSourceConfig.setTransactionTimeout(jdbcEnum.getTransactionTimeout());
-        return dataSourceConfig;
-    }
-
-    /**
      * 创建数据库连接池【Druid】
      *
      * @param config config
@@ -176,16 +143,24 @@ public class JdbcMultiHolder {
      */
     private static DataSource getDataSource(DataSourceConfig config) {
         DruidDataSource datasource = new DruidDataSource();
-        datasource.setDriverClassName(config.getDriver());
+        if (ObjUtil.isEmpty(config)
+                || ObjUtil.isEmpty(config.getKey())
+                || ObjUtil.isEmpty(config.getDriverClassName())
+                || ObjUtil.isEmpty(config.getUrl())
+                || ObjUtil.isEmpty(config.getUsername())
+                || ObjUtil.isEmpty(config.getPassword())) {
+            ExceptionHandler.pushExc("500", "Datasouece init error.", BaseException.class);
+        }
+        datasource.setDriverClassName(config.getDriverClassName());
         datasource.setUrl(config.getUrl());
         datasource.setUsername(config.getUsername());
         datasource.setPassword(config.getPassword());
-        datasource.setInitialSize(config.getInitialSize());
-        datasource.setMaxActive(config.getMaxActive());
-        datasource.setMinIdle(config.getMinIdle());
-        datasource.setMaxWait(config.getMaxWait());
-        datasource.setQueryTimeout(config.getQueryTimeout());
-        datasource.setTransactionQueryTimeout(config.getTransactionTimeout());
+        datasource.setInitialSize(ObjUtil.isEmpty(config.getInitialSize()) ? NumberConst.FIVE : config.getInitialSize());
+        datasource.setMaxActive(ObjUtil.isEmpty(config.getMaxActive()) ? NumberConst.TEN : config.getMaxActive());
+        datasource.setMinIdle(ObjUtil.isEmpty(config.getMinIdle()) ? NumberConst.FIVE : config.getMinIdle());
+        datasource.setMaxWait(ObjUtil.isEmpty(config.getMaxWait()) ? NumberConst.SIXTY_THOUSAND : config.getMaxWait());
+        datasource.setQueryTimeout(ObjUtil.isEmpty(config.getQueryTimeout()) ? NumberConst.ONE_THOUSAND : config.getQueryTimeout());
+        datasource.setTransactionQueryTimeout(ObjUtil.isEmpty(config.getTransactionTimeout()) ? NumberConst.ONE_THOUSAND : config.getTransactionTimeout());
         return datasource;
     }
 

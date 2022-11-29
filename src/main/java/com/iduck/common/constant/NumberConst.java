@@ -71,6 +71,16 @@ public class NumberConst {
      */
     public static final int NINE_HUNDRED_AND_NINETY_NINE = 999;
 
+    /**
+     * 常量1000
+     */
+    public static final int ONE_THOUSAND = 1000;
+
+    /**
+     * 常量60000
+     */
+    public static final int SIXTY_THOUSAND = 60000;
+
     private NumberConst() {
 
     }

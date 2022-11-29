@@ -14,7 +14,7 @@ import java.util.Map;
 @Component
 @Configuration
 @ConfigurationProperties(prefix = "multi.datasource")
-public class JdbcPropConfig {
+public class JdbcSourcePropConfig {
 
     @Value("${multi.datasource.type:properties}")
     private String type;

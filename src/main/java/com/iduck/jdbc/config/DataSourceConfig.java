@@ -14,7 +14,7 @@ public class DataSourceConfig {
 
     private String password;
 
-    private String driver;
+    private String driverClassName;
 
     private String url;
 
@@ -56,12 +56,12 @@ public class DataSourceConfig {
         this.password = password;
     }
 
-    public String getDriver() {
-        return driver;
+    public String getDriverClassName() {
+        return driverClassName;
     }
 
-    public void setDriver(String driver) {
-        this.driver = driver;
+    public void setDriverClassName(String driverClassName) {
+        this.driverClassName = driverClassName;
     }
 
     public String getUrl() {
@@ -134,7 +134,7 @@ public class DataSourceConfig {
                 "key='" + key + '\'' +
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
-                ", driver='" + driver + '\'' +
+                ", driverClassName='" + driverClassName + '\'' +
                 ", url='" + url + '\'' +
                 ", type='" + type + '\'' +
                 ", initialSize=" + initialSize +
