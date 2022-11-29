@@ -4,9 +4,9 @@ import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.ObjUtil;
 import com.alibaba.druid.pool.DruidDataSource;
 import com.iduck.common.constant.NumberConst;
-import com.iduck.common.util.SpringContextHolder;
+import com.iduck.common.util.ISpringContextHolder;
 import com.iduck.exception.model.BaseException;
-import com.iduck.exception.util.ExceptionHandler;
+import com.iduck.exception.util.IExceptionHandler;
 import com.iduck.jdbc.config.DataSourceConfig;
 import com.iduck.jdbc.config.JdbcSourcePropConfig;
 import com.iduck.jdbc.service.MultiDatasourceService;
@@ -28,8 +28,8 @@ import java.util.concurrent.ConcurrentHashMap;
  * @since 2022/11/21
  */
 @Component
-public class JdbcMultiHolder {
-    private static final Logger log = LoggerFactory.getLogger(JdbcMultiHolder.class);
+public class IJdbcMultiHolder {
+    private static final Logger log = LoggerFactory.getLogger(IJdbcMultiHolder.class);
 
     private static final String SERVICE_IMPL = "service";
 
@@ -42,7 +42,7 @@ public class JdbcMultiHolder {
      */
     private static final Map<String, JdbcTemplate> JDBC_MAP = new ConcurrentHashMap<>();
 
-    private static JdbcMultiHolder jdbcMultiHolder;
+    private static IJdbcMultiHolder jdbcMultiHolder;
 
     @Autowired
     private JdbcTemplate defaultJdbcTemplate;
@@ -126,14 +126,14 @@ public class JdbcMultiHolder {
      * 创建多数据源连接【by Bean】
      */
     private static void initByServiceImpl() {
-        MultiDatasourceService bean = SpringContextHolder.getBean(MultiDatasourceService.class, true);
+        MultiDatasourceService bean = ISpringContextHolder.getBean(MultiDatasourceService.class, true);
 
         // 判断用户是否实现MultiDatasourceService接口
         if (ObjUtil.isNull(bean)) {
             log.error("JdbcMultiHolder =>Init Multi datasource[type:service] fail. If not implements interface[MultiDatasourceService]. Please change config[multi.datasource.type] to 'properties'.");
             return;
         }
-        bean.getDatasourceConfig().forEach(JdbcMultiHolder::initJdbcTemplate);
+        bean.getDatasourceConfig().forEach(IJdbcMultiHolder::initJdbcTemplate);
     }
 
     /**
@@ -159,7 +159,7 @@ public class JdbcMultiHolder {
         if (ObjUtil.isEmpty(config) || ObjUtil.isEmpty(config.getKey())
                 || ObjUtil.isEmpty(config.getDriverClassName()) || ObjUtil.isEmpty(config.getUrl())
                 || ObjUtil.isEmpty(config.getUsername()) || ObjUtil.isEmpty(config.getPassword())) {
-            ExceptionHandler.pushExc("500", "Datasource init error.", BaseException.class);
+            IExceptionHandler.pushExc("500", "Datasource init error.", BaseException.class);
         }
         datasource.setDriverClassName(config.getDriverClassName());
         datasource.setUrl(config.getUrl());
@@ -174,7 +174,7 @@ public class JdbcMultiHolder {
         return datasource;
     }
 
-    private JdbcMultiHolder() {
+    private IJdbcMultiHolder() {
 
     }
 }

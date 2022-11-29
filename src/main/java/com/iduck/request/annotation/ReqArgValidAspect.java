@@ -1,6 +1,6 @@
 package com.iduck.request.annotation;
 
-import com.iduck.exception.util.ExceptionHandler;
+import com.iduck.exception.util.IExceptionHandler;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -41,7 +41,7 @@ public class ReqArgValidAspect {
                 // 指定校验方法返回值为boolean
                 boolean result = (boolean) m.invoke(arg);
                 if (!result) {
-                    ExceptionHandler.pushValidExc(errorMsg);
+                    IExceptionHandler.pushValidExc(errorMsg);
                 }
             }
         }

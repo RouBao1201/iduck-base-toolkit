@@ -17,14 +17,14 @@ import java.util.Map;
  * @since 2022/10/28
  */
 @Component
-public class SpringContextHolder implements ApplicationContextAware {
-    private static final Logger log = LoggerFactory.getLogger(SpringContextHolder.class);
+public class ISpringContextHolder implements ApplicationContextAware {
+    private static final Logger log = LoggerFactory.getLogger(ISpringContextHolder.class);
 
     private static ApplicationContext applicationContext;
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        SpringContextHolder.applicationContext = applicationContext;
+        ISpringContextHolder.applicationContext = applicationContext;
     }
 
     /**

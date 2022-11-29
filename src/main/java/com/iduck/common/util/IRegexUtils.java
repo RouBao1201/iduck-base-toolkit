@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
  * @author SongYanBin
  * @since 2022/11/28
  **/
-public class RegexUtils {
+public class IRegexUtils {
     /**
      * 验证手机号（简单）
      *
@@ -127,10 +127,10 @@ public class RegexUtils {
     }
 
     public static void main(String[] args) {
-        System.out.println(RegexUtils.isEmail("624142800@qq.com"));
+        System.out.println(IRegexUtils.isEmail("624142800@qq.com"));
     }
 
-    private RegexUtils() {
+    private IRegexUtils() {
 
     }
 }

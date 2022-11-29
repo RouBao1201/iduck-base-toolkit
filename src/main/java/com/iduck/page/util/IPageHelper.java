@@ -6,7 +6,7 @@ import com.github.pagehelper.ISelect;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.iduck.exception.model.BusinessException;
-import com.iduck.exception.util.ExceptionHandler;
+import com.iduck.exception.util.IExceptionHandler;
 import com.iduck.request.model.BaseReq;
 import com.iduck.response.enuns.RespEnum;
 import com.iduck.page.model.BasePage;
@@ -40,7 +40,7 @@ public class IPageHelper {
         BasePage reqPage = req.getPageInfo();
         if (ObjUtil.isEmpty(reqPage)) {
             log.error("PageHandler => The request parameter[PageInfo] cannot be null.");
-            ExceptionHandler.pushExc(RespEnum.FAIL.getCode(), RespEnum.FAIL.getMessage(), BusinessException.class);
+            IExceptionHandler.pushExc(RespEnum.FAIL.getCode(), RespEnum.FAIL.getMessage(), BusinessException.class);
         }
 
         // 执行分页查询mapper

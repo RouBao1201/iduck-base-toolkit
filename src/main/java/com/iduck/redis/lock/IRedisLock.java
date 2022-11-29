@@ -6,7 +6,7 @@ package com.iduck.redis.lock;
  * @author songYanBin
  * @since 2022/11/22
  */
-public interface RedisLock {
+public interface IRedisLock {
     /**
      * 获取redis锁
      *

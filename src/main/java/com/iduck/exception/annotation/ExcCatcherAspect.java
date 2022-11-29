@@ -1,6 +1,6 @@
 package com.iduck.exception.annotation;
 
-import com.iduck.response.util.RespBuilder;
+import com.iduck.response.util.IRespBuilder;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -47,7 +47,7 @@ public class ExcCatcherAspect {
                 proceed = pjp.proceed();
             } catch (Throwable e) {
                 log.info("ExcCatcherAspect[class] => Execute error it is returned by default[BaseResp]. ErrorMessage:{}", e.getMessage());
-                return RespBuilder.error(errorMsg, null, e.getMessage());
+                return IRespBuilder.error(errorMsg, null, e.getMessage());
             }
         } else {
             ExcCatcher methodCatcher = signature.getMethod().getAnnotation(ExcCatcher.class);
@@ -56,7 +56,7 @@ public class ExcCatcherAspect {
                 proceed = pjp.proceed();
             } catch (Throwable e) {
                 log.info("ExcCatcherAspect[method] => Execute error it is returned by default[BaseResp]. ErrorMessage:{}", e.getMessage());
-                return RespBuilder.error(errorMsg, null, e.getMessage());
+                return IRespBuilder.error(errorMsg, null, e.getMessage());
             }
         }
         return proceed;

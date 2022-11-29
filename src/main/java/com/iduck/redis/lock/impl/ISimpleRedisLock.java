@@ -2,7 +2,7 @@ package com.iduck.redis.lock.impl;
 
 import cn.hutool.core.util.BooleanUtil;
 import cn.hutool.core.util.IdUtil;
-import com.iduck.redis.lock.RedisLock;
+import com.iduck.redis.lock.IRedisLock;
 import org.springframework.data.redis.core.StringRedisTemplate;
 
 import java.util.concurrent.TimeUnit;
@@ -13,7 +13,7 @@ import java.util.concurrent.TimeUnit;
  * @author songYanBin
  * @since 2022/11/22
  */
-public class SimpleRedisLock implements RedisLock {
+public class ISimpleRedisLock implements IRedisLock {
 
     private static final String KEY_PREFIX = "simple-lock:";
 
@@ -23,7 +23,7 @@ public class SimpleRedisLock implements RedisLock {
 
     private final StringRedisTemplate stringRedisTemplate;
 
-    private SimpleRedisLock(StringRedisTemplate stringRedisTemplate) {
+    private ISimpleRedisLock(StringRedisTemplate stringRedisTemplate) {
         this.stringRedisTemplate = stringRedisTemplate;
     }
 

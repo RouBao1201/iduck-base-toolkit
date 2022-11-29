@@ -8,7 +8,7 @@ import cn.hutool.core.util.StrUtil;
  * @author songYanBin
  * @since 2022/11/23
  */
-public class SqlHelper {
+public class ISqlHelper {
 
     private static final String SPACE_WHERE = " where";
 
@@ -18,11 +18,11 @@ public class SqlHelper {
 
     private final StringBuilder sqlBuilder;
 
-    public static SqlHelper builder(String sql) {
-        return new SqlHelper(sql);
+    public static ISqlHelper builder(String sql) {
+        return new ISqlHelper(sql);
     }
 
-    public SqlHelper startLike(String column, String arg) {
+    public ISqlHelper startLike(String column, String arg) {
         this.sqlBuilder.append(" and ")
                 .append(column)
                 .append(" like '")
@@ -31,7 +31,7 @@ public class SqlHelper {
         return this;
     }
 
-    public SqlHelper endLike(String column, String arg) {
+    public ISqlHelper endLike(String column, String arg) {
         this.sqlBuilder.append(" and ")
                 .append(column)
                 .append(" like '%")
@@ -40,7 +40,7 @@ public class SqlHelper {
         return this;
     }
 
-    public SqlHelper notStartLike(String column, String arg) {
+    public ISqlHelper notStartLike(String column, String arg) {
         this.sqlBuilder.append(" and ")
                 .append(column)
                 .append(" not like '")
@@ -49,7 +49,7 @@ public class SqlHelper {
         return this;
     }
 
-    public SqlHelper notEndLike(String column, String arg) {
+    public ISqlHelper notEndLike(String column, String arg) {
         this.sqlBuilder.append(" and ")
                 .append(column)
                 .append(" not like '%")
@@ -58,7 +58,7 @@ public class SqlHelper {
         return this;
     }
 
-    public SqlHelper like(String column, String arg) {
+    public ISqlHelper like(String column, String arg) {
         this.sqlBuilder.append(" and ")
                 .append(column)
                 .append(" like '%")
@@ -67,7 +67,7 @@ public class SqlHelper {
         return this;
     }
 
-    public SqlHelper notLike(String column, String arg) {
+    public ISqlHelper notLike(String column, String arg) {
         this.sqlBuilder.append(" and ")
                 .append(column)
                 .append(" not like '%")
@@ -76,7 +76,7 @@ public class SqlHelper {
         return this;
     }
 
-    public SqlHelper between(String column, String begin, String end) {
+    public ISqlHelper between(String column, String begin, String end) {
         this.sqlBuilder.append(" and ")
                 .append(column)
                 .append(" between '")
@@ -87,7 +87,7 @@ public class SqlHelper {
         return this;
     }
 
-    public SqlHelper between(String column, int begin, int end) {
+    public ISqlHelper between(String column, int begin, int end) {
         this.sqlBuilder.append(" and ")
                 .append(column)
                 .append(" between ")
@@ -98,7 +98,7 @@ public class SqlHelper {
         return this;
     }
 
-    public SqlHelper in(String column, int[] args) {
+    public ISqlHelper in(String column, int[] args) {
         this.sqlBuilder.append(" and ")
                 .append(column)
                 .append(" in (")
@@ -107,7 +107,7 @@ public class SqlHelper {
         return this;
     }
 
-    public SqlHelper in(String column, String[] args) {
+    public ISqlHelper in(String column, String[] args) {
         this.sqlBuilder.append(" and ")
                 .append(column)
                 .append(" in ('")
@@ -116,7 +116,7 @@ public class SqlHelper {
         return this;
     }
 
-    public SqlHelper notIn(String column, int[] args) {
+    public ISqlHelper notIn(String column, int[] args) {
         this.sqlBuilder.append(" and ")
                 .append(column)
                 .append(" not in (")
@@ -125,7 +125,7 @@ public class SqlHelper {
         return this;
     }
 
-    public SqlHelper notIn(String column, String[] args) {
+    public ISqlHelper notIn(String column, String[] args) {
         this.sqlBuilder.append(" and ")
                 .append(column)
                 .append(" not in ('")
@@ -155,7 +155,7 @@ public class SqlHelper {
         }
     }
 
-    private SqlHelper(String sql) {
+    private ISqlHelper(String sql) {
         this.sqlBuilder = new StringBuilder(sql);
         initCheck(sqlBuilder);
     }

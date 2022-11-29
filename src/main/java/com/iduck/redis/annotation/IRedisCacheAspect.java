@@ -1,7 +1,7 @@
 package com.iduck.redis.annotation;
 
 import cn.hutool.core.util.ObjUtil;
-import com.iduck.redis.util.RedisHelper;
+import com.iduck.redis.util.IRedisHelper;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -38,14 +38,14 @@ public class IRedisCacheAspect {
         // TODO 后期优化,暂时这么写
         if (obtain == IRedisCache.ObtainType.ONLY_REDIS) {
             // 仅获取redis中数据,哪怕为null,直接返回结果
-            result = RedisHelper.get(key);
+            result = IRedisHelper.get(key);
         } else if (obtain == IRedisCache.ObtainType.REFRESH) {
             // 执行方法获取数据,并将数据存入redis（保持redis为最新数据,可供其他地方调用）
             result = pjp.proceed();
             this.setRedis(key, result, expire);
         } else if (obtain == IRedisCache.ObtainType.ABSENT) {
             // 先查找redis中数据,若redis没有再执行方法,返回数据（无法保证redis为最新数据）
-            Object obj = RedisHelper.get(key);
+            Object obj = IRedisHelper.get(key);
             if (ObjUtil.isNull(obj)) {
                 result = pjp.proceed();
                 this.setRedis(key, result, expire);
@@ -56,9 +56,9 @@ public class IRedisCacheAspect {
 
     public void setRedis(String key, Object obj, long expireTime) {
         if (expireTime > 0) {
-            RedisHelper.set(key, obj, expireTime, TimeUnit.SECONDS);
+            IRedisHelper.set(key, obj, expireTime, TimeUnit.SECONDS);
         } else {
-            RedisHelper.set(key, obj);
+            IRedisHelper.set(key, obj);
         }
     }
 }

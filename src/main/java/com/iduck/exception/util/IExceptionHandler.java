@@ -15,8 +15,8 @@ import org.slf4j.LoggerFactory;
  * @author songYanBin
  * @since 2022/11/24
  */
-public class ExceptionHandler {
-    private static final Logger log = LoggerFactory.getLogger(ExceptionHandler.class);
+public class IExceptionHandler {
+    private static final Logger log = LoggerFactory.getLogger(IExceptionHandler.class);
 
     /**
      * 抛出参数校验异常
@@ -115,7 +115,7 @@ public class ExceptionHandler {
         return t;
     }
 
-    private ExceptionHandler() {
+    private IExceptionHandler() {
 
     }
 }

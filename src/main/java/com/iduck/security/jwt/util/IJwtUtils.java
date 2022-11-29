@@ -23,10 +23,10 @@ import java.util.Map;
  * @since 2022/11/27
  **/
 @Component
-public class JwtUtils {
-    private static final Logger log = LoggerFactory.getLogger(JwtUtils.class);
+public class IJwtUtils {
+    private static final Logger log = LoggerFactory.getLogger(IJwtUtils.class);
 
-    private static JwtUtils jwtUtils;
+    private static IJwtUtils jwtUtils;
 
     @Autowired
     private JwtConfig config;
@@ -120,7 +120,7 @@ public class JwtUtils {
         return String.valueOf(claims.get("userId"));
     }
 
-    private JwtUtils() {
+    private IJwtUtils() {
 
     }
 }

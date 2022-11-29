@@ -11,7 +11,7 @@ import java.util.Date;
  * @author songYanBin
  * @since 2022/11/24
  */
-public class RespBuilder {
+public class IRespBuilder {
 
     /**
      * 成功响应
@@ -114,7 +114,7 @@ public class RespBuilder {
         return resp;
     }
 
-    private RespBuilder() {
+    private IRespBuilder() {
 
     }
 }

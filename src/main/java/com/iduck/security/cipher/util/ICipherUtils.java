@@ -1,6 +1,6 @@
 package com.iduck.security.cipher.util;
 
-import com.iduck.common.util.SpringContextHolder;
+import com.iduck.common.util.ISpringContextHolder;
 import com.iduck.security.cipher.config.CipherConfig;
 
 /**
@@ -9,7 +9,7 @@ import com.iduck.security.cipher.config.CipherConfig;
  * @author SongYanBin
  * @since 2022/11/27
  **/
-public class CipherUtils {
+public class ICipherUtils {
 
     private static final MD5Utils MD5_UTILS;
 
@@ -20,7 +20,7 @@ public class CipherUtils {
     private static final CipherConfig CIPHER_CONFIG;
 
     static {
-        CIPHER_CONFIG = SpringContextHolder.getBean(CipherConfig.class);
+        CIPHER_CONFIG = ISpringContextHolder.getBean(CipherConfig.class);
         MD5_UTILS = new MD5Utils(CIPHER_CONFIG.getMd5Salt());
         AES_UTILS = new AESUtils(CIPHER_CONFIG.getAesKey());
         RSA_UTILS = new RSAUtils(CIPHER_CONFIG.getRsaKey());
@@ -38,7 +38,7 @@ public class CipherUtils {
         return RSA_UTILS;
     }
 
-    private CipherUtils() {
+    private ICipherUtils() {
 
     }
 }

@@ -22,10 +22,10 @@ import java.util.regex.Pattern;
  */
 @SuppressWarnings(value = {"unchecked", "rawtypes"})
 @Component
-public class RedisHelper {
-    private static final Logger log = LoggerFactory.getLogger(RedisHelper.class);
+public class IRedisHelper {
+    private static final Logger log = LoggerFactory.getLogger(IRedisHelper.class);
 
-    private static RedisHelper redisHelper;
+    private static IRedisHelper redisHelper;
 
     @PostConstruct
     public void init() {
@@ -152,6 +152,6 @@ public class RedisHelper {
 
     // TODO 还有很多方法,后续再添加
 
-    private RedisHelper() {
+    private IRedisHelper() {
     }
 }

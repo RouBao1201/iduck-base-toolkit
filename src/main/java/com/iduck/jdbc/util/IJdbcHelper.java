@@ -22,10 +22,10 @@ import java.util.function.Consumer;
  * @since 2022/11/23
  */
 @Component
-public class JdbcHelper {
-    private static final Logger log = LoggerFactory.getLogger(JdbcHelper.class);
+public class IJdbcHelper {
+    private static final Logger log = LoggerFactory.getLogger(IJdbcHelper.class);
 
-    private static JdbcHelper jdbcHelper;
+    private static IJdbcHelper jdbcHelper;
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
@@ -198,7 +198,7 @@ public class JdbcHelper {
         }
     }
 
-    private JdbcHelper() {
+    private IJdbcHelper() {
 
     }
 }
