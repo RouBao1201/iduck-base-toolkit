@@ -8,13 +8,16 @@ import org.springframework.stereotype.Component;
 import java.util.Map;
 
 /**
+ * 多数据源配置类
+ *
  * @author songYanBin
+ * @Copyright 2022-2099 SongYanBin All Rights Reserved.
  * @since 2022/11/21
  */
 @Component
 @Configuration
 @ConfigurationProperties(prefix = "multi.datasource")
-public class JdbcSourcePropConfig {
+public class MultiSourcePropConfig {
 
     @Value("${multi.datasource.type:properties}")
     private String type;

@@ -4,6 +4,7 @@ package com.iduck.common.util;
  * 结果对象
  *
  * @author songYanBin
+ * @Copyright 2022-2099 SongYanBin All Rights Reserved.
  * @since 2022/11/24
  */
 public class Result {

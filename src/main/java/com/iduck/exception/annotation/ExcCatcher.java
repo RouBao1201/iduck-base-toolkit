@@ -12,6 +12,7 @@ import java.lang.annotation.Target;
  * 异常捕获自定义注解
  *
  * @author JieN
+ * @Copyright 2022-2099 SongYanBin All Rights Reserved.
  * @since 2022/11/28
  */
 @Documented

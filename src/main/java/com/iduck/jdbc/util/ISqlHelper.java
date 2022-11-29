@@ -6,6 +6,7 @@ import cn.hutool.core.util.StrUtil;
  * Sql工具类
  *
  * @author songYanBin
+ * @Copyright 2022-2099 SongYanBin All Rights Reserved.
  * @since 2022/11/23
  */
 public class ISqlHelper {

@@ -11,6 +11,7 @@ import java.util.Date;
  * 基础响应体
  *
  * @author songYanBin
+ * @Copyright 2022-2099 SongYanBin All Rights Reserved.
  * @since 2022/11/24
  */
 public class BaseResp<T> implements Serializable {

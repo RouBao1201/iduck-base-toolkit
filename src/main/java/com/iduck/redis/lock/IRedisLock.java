@@ -4,6 +4,7 @@ package com.iduck.redis.lock;
  * Redis分布式锁
  *
  * @author songYanBin
+ * @Copyright 2022-2099 SongYanBin All Rights Reserved.
  * @since 2022/11/22
  */
 public interface IRedisLock {

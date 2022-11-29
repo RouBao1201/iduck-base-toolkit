@@ -21,6 +21,7 @@ import java.util.List;
  * 分页查询工具类
  *
  * @author songYanBin
+ * @Copyright 2022-2099 SongYanBin All Rights Reserved.
  * @since 2022/11/24
  */
 public class IPageHelper {

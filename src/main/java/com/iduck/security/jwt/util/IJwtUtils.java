@@ -20,6 +20,7 @@ import java.util.Map;
  * Jwt工具类
  *
  * @author SongYanBin
+ * @Copyright 2022-2099 SongYanBin All Rights Reserved.
  * @since 2022/11/27
  **/
 @Component

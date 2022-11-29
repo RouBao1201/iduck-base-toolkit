@@ -18,6 +18,7 @@ import java.util.regex.Pattern;
  * Redis工具类（RedisTemplate进一步封装）
  *
  * @author songYanBin
+ * @Copyright 2022-2099 SongYanBin All Rights Reserved.
  * @since 2022/11/24
  */
 @SuppressWarnings(value = {"unchecked", "rawtypes"})

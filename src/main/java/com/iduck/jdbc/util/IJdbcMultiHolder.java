@@ -8,7 +8,7 @@ import com.iduck.common.util.ISpringContextHolder;
 import com.iduck.exception.model.BaseException;
 import com.iduck.exception.util.IExceptionHandler;
 import com.iduck.jdbc.config.DataSourceConfig;
-import com.iduck.jdbc.config.JdbcSourcePropConfig;
+import com.iduck.jdbc.config.MultiSourcePropConfig;
 import com.iduck.jdbc.service.MultiDatasourceService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,7 +48,7 @@ public class IJdbcMultiHolder {
     private JdbcTemplate defaultJdbcTemplate;
 
     @Autowired
-    private JdbcSourcePropConfig config;
+    private MultiSourcePropConfig config;
 
     @PostConstruct
     public void init() {

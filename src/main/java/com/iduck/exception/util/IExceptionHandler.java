@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
  * 异常处理类
  *
  * @author songYanBin
+ * @Copyright 2022-2099 SongYanBin All Rights Reserved.
  * @since 2022/11/24
  */
 public class IExceptionHandler {

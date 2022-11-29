@@ -19,6 +19,7 @@ import java.util.function.Consumer;
  * Jdbc工具类
  *
  * @author songYanBin
+ * @Copyright 2022-2099 SongYanBin All Rights Reserved.
  * @since 2022/11/23
  */
 @Component

@@ -10,6 +10,7 @@ import java.lang.annotation.Target;
  * 请求参数校验自定义注解
  *
  * @author JieN
+ * @Copyright 2022-2099 SongYanBin All Rights Reserved.
  * @since 2022/11/28
  */
 @Documented

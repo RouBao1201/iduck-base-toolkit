@@ -4,6 +4,7 @@ package com.iduck.common.constant;
  * 符号常量
  *
  * @author songYanBin
+ * @Copyright 2022-2099 SongYanBin All Rights Reserved.
  * @since 2022/10/29
  */
 public class SymbolConst {
