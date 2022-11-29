@@ -23,8 +23,8 @@ import java.util.List;
  * @author songYanBin
  * @since 2022/11/24
  */
-public class PageHandler {
-    private static final Logger log = LoggerFactory.getLogger(PageHandler.class);
+public class IPageHelper {
+    private static final Logger log = LoggerFactory.getLogger(IPageHelper.class);
 
     /**
      * 分页查询
