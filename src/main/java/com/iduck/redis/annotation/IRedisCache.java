@@ -43,6 +43,6 @@ public @interface IRedisCache {
     }
 
     class Key {
-        public static final String DEFAULT_KEY = "iduck:redisCache:defaultKey:";
+        public static final String DEFAULT_KEY = "iduck:IRedisCache:defaultKey:";
     }
 }
