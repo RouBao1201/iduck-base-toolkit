@@ -1,6 +1,5 @@
-package com.iduck.exception.aspect;
+package com.iduck.exception.annotation;
 
-import com.iduck.exception.annotation.ExcCatcher;
 import com.iduck.response.util.RespBuilder;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;

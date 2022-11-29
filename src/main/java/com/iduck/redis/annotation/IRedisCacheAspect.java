@@ -1,7 +1,6 @@
-package com.iduck.redis.aspect;
+package com.iduck.redis.annotation;
 
 import cn.hutool.core.util.ObjUtil;
-import com.iduck.redis.annotation.IRedisCache;
 import com.iduck.redis.util.RedisHelper;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -20,7 +19,7 @@ import java.util.concurrent.TimeUnit;
  **/
 @Aspect
 @Component
-public class RedisCacheAspect {
+public class IRedisCacheAspect {
 
     @Pointcut("@annotation(com.iduck.redis.annotation.IRedisCache)")
     public void pointCut() {
