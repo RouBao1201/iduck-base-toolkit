@@ -35,28 +35,13 @@ public class AESUtils {
     private static final String CIPHER_AES = "AES/ECB/PKCS5Padding";
 
     /**
-     * 密钥长度128
-     */
-    public static final int KEY_SIZE_128_LENGTH = 128;
-
-    /**
-     * 密钥长度192
-     */
-    public static final int KEY_SIZE_192_LENGTH = 192;
-
-    /**
-     * 密钥长度256
-     */
-    public static final int KEY_SIZE_256_LENGTH = 256;
-
-    /**
      * 加密
      *
      * @param str 明文
      * @return 密文
      */
     public String encrypt(String str) {
-        return encrypt(str, key);
+        return encrypt(str, this.key);
     }
 
     /**
@@ -66,7 +51,7 @@ public class AESUtils {
      * @return 明文
      */
     public String decrypt(String cipherStr) {
-        return decrypt(cipherStr, key);
+        return decrypt(cipherStr, this.key);
     }
 
     /**
@@ -164,5 +149,22 @@ public class AESUtils {
 
     public AESUtils(String key) {
         this.key = key;
+    }
+
+    public static class KeySize {
+        /**
+         * 密钥长度128
+         */
+        public static final int KEY_SIZE_128_LENGTH = 128;
+
+        /**
+         * 密钥长度192
+         */
+        public static final int KEY_SIZE_192_LENGTH = 192;
+
+        /**
+         * 密钥长度256
+         */
+        public static final int KEY_SIZE_256_LENGTH = 256;
     }
 }

@@ -24,7 +24,7 @@ public class ICipherUtils {
         CIPHER_CONFIG = ISpringContextHolder.getBean(CipherConfig.class);
         MD5_UTILS = new MD5Utils(CIPHER_CONFIG.getMd5Salt());
         AES_UTILS = new AESUtils(CIPHER_CONFIG.getAesKey());
-        RSA_UTILS = new RSAUtils(CIPHER_CONFIG.getRsaKey());
+        RSA_UTILS = new RSAUtils(CIPHER_CONFIG.getRsaPrivateKey(), CIPHER_CONFIG.getRsaPublicKey());
     }
 
     public static MD5Utils MD5() {

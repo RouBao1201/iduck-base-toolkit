@@ -1,0 +1,13 @@
+jwt:
+  config:
+    secret-key: jwt-secret-iduck
+    expire-time: 0
+cipher:
+  config:
+    aes:
+      key: r9XMC8xq2XoN/Vni5m/xVQ==
+    md5:
+      salt: iduck-md5-salt
+    rsa:
+      private-key: 123
+      public-key: 456

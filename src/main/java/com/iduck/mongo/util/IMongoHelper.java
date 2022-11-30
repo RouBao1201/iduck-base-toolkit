@@ -63,7 +63,6 @@ public class IMongoHelper {
      * @param collectionName 集合名
      */
     public static void remove(Object obj, String collectionName) {
-
         mongoHelper.mongoTemplate.remove(obj, collectionName);
     }
 

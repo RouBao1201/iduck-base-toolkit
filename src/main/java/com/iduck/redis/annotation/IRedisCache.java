@@ -39,7 +39,7 @@ public @interface IRedisCache {
         REFRESH,
         ABSENT;
 
-        private ObtainType() {
+        ObtainType() {
         }
     }
 

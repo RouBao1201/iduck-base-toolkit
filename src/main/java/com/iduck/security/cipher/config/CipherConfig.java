@@ -12,14 +12,18 @@ import org.springframework.stereotype.Component;
  **/
 @Component
 public class CipherConfig {
-    @Value("${cipher.config.secret-key.aes-key:r9XMC8xq2XoN/Vni5m/xVQ==}")
+    @Value("${cipher.config.aes.key:r9XMC8xq2XoN/Vni5m/xVQ==}")
     private String aesKey;
 
-    @Value("${cipher.config.secret-key.md5-salt:iduck-md5-salt}")
+    @Value("${cipher.config.md5.salt:iduck-md5-salt}")
     private String md5Salt;
 
-    @Value("${cipher.config.secret-key.rsa-key:iduck-rsa-key}")
-    private String rsaKey;
+    @Value("${cipher.config.rsa.private-key:''}")
+    private String rsaPrivateKey;
+
+    @Value("${cipher.config.rsa.public-key:''}")
+    private String rsaPublicKey;
+
 
     public String getAesKey() {
         return aesKey;
@@ -37,11 +41,19 @@ public class CipherConfig {
         this.md5Salt = md5Salt;
     }
 
-    public String getRsaKey() {
-        return rsaKey;
+    public String getRsaPrivateKey() {
+        return rsaPrivateKey;
     }
 
-    public void setRsaKey(String rsaKey) {
-        this.rsaKey = rsaKey;
+    public void setRsaPrivateKey(String rsaPrivateKey) {
+        this.rsaPrivateKey = rsaPrivateKey;
+    }
+
+    public String getRsaPublicKey() {
+        return rsaPublicKey;
+    }
+
+    public void setRsaPublicKey(String rsaPublicKey) {
+        this.rsaPublicKey = rsaPublicKey;
     }
 }
