@@ -11,3 +11,11 @@ cipher:
     rsa:
       private-key: 123
       public-key: 456
+thread-pool:
+  config:
+    prefix-name: iduck-pool
+    block-queue-length: 1000
+    keep-alvie-time: 60000
+    core-pool-size: 10
+    max-pool-size: 20
+

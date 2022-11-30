@@ -15,31 +15,31 @@ public class ThreadPoolConfig {
     /**
      * 线程池前缀
      */
-    @Value("${threadpool.config.prefix-name:iduck-pool}}")
+    @Value("${thread-pool.config.prefix-name:iduck-pool}}")
     private String poolPrefixName;
 
     /**
      * 等待队列长度
      */
-    @Value("${threadpool.config.block-queue-length:1000}")
+    @Value("${thread-pool.config.block-queue-length:1000}")
     private int blockingQueueLength;
 
     /**
      * 闲置线程存活时间
      */
-    @Value("${threadpool.config.keep-alvie-time:60000}")
+    @Value("${thread-pool.config.keep-alvie-time:60000}")
     private long keepAliveTime;
 
     /**
      * 核心线程数
      */
-    @Value("${threadpool.config.core-pool-size:10}")
+    @Value("${thread-pool.config.core-pool-size:10}")
     private int corePoolSize;
 
     /**
      * 最大线程数
      */
-    @Value("${threadpool.config.max-pool-size:20}")
+    @Value("${thread-pool.config.max-pool-size:20}")
     private int maximumPoolSize;
 
 
