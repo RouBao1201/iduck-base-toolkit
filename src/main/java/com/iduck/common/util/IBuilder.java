@@ -9,7 +9,7 @@ import java.util.function.Supplier;
  * 基础通用构造器
  *
  * @author songYanBin
- * @Copyright 2022-2099 SongYanBin All Rights Reserved.
+ * @copyright 2022-2099 SongYanBin All Rights Reserved.
  * @since 2022/11/23
  */
 public class IBuilder<T> {

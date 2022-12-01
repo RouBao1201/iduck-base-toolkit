@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
  * 线程池配置类
  *
  * @author SongYanBin
- * @Copyright 2022-2099 SongYanBin All Rights Reserved.
+ * @copyright 2022-2099 SongYanBin All Rights Reserved.
  * @since 2022/11/30
  */
 @Component
@@ -15,7 +15,7 @@ public class ThreadPoolConfig {
     /**
      * 线程池前缀
      */
-    @Value("${thread-pool.config.prefix-name:iduck-pool}}")
+    @Value("${thread-pool.config.prefix-name:iduck-pool}")
     private String poolPrefixName;
 
     /**

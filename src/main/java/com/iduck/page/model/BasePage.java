@@ -6,7 +6,7 @@ import java.io.Serializable;
  * 基础分页对象
  *
  * @author songYanBin
- * @Copyright 2022-2099 SongYanBin All Rights Reserved.
+ * @copyright 2022-2099 SongYanBin All Rights Reserved.
  * @since 2022/11/24
  */
 public class BasePage implements Serializable {

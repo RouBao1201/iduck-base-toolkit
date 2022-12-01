@@ -11,7 +11,7 @@ import java.util.concurrent.TimeUnit;
  * 简单redis分布式锁
  *
  * @author songYanBin
- * @Copyright 2022-2099 SongYanBin All Rights Reserved.
+ * @copyright 2022-2099 SongYanBin All Rights Reserved.
  * @since 2022/11/22
  */
 public class ISimpleRedisLock implements IRedisLock {

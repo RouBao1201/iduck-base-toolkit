@@ -15,7 +15,7 @@ import java.nio.charset.StandardCharsets;
  * redis序列化[fastjson]
  *
  * @author SongYanBin
- * @Copyright 2022-2099 SongYanBin All Rights Reserved.
+ * @copyright 2022-2099 SongYanBin All Rights Reserved.
  * @since 2022/11/26
  **/
 public class FastJson2JsonRedisSerializer<T> implements RedisSerializer<T> {

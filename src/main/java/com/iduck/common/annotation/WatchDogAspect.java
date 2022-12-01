@@ -17,7 +17,7 @@ import java.lang.reflect.Method;
  * 监控狗切面
  *
  * @author SongYanBin
- * @Copyright 2022-2099 SongYanBin All Rights Reserved.
+ * @copyright 2022-2099 SongYanBin All Rights Reserved.
  * @since 2022/11/30
  **/
 @Aspect
@@ -36,7 +36,7 @@ public class WatchDogAspect {
         Method method = signature.getMethod();
         WatchDog annotation = method.getAnnotation(WatchDog.class);
         Object obj = null;
-        if (annotation.runType() == WatchDog.RunType.MONITOR_TIME) {
+        if (annotation.runType() == WatchDog.RunType.TIMER) {
             StopWatch stopWatch = new StopWatch();
             stopWatch.start();
             obj = pjp.proceed();

@@ -8,7 +8,7 @@ import java.util.regex.Pattern;
  * 正则工具类（网上摘录未实践,搭配RegexConst使用）
  *
  * @author SongYanBin
- * @Copyright 2022-2099 SongYanBin All Rights Reserved.
+ * @copyright 2022-2099 SongYanBin All Rights Reserved.
  * @since 2022/11/28
  **/
 public class IRegexUtils {

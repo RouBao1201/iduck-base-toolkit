@@ -4,7 +4,7 @@ package com.iduck.jdbc.config;
  * 数据源配置参数实体
  *
  * @author songYanBin
- * @Copyright 2022-2099 SongYanBin All Rights Reserved.
+ * @copyright 2022-2099 SongYanBin All Rights Reserved.
  * @since 2022/11/21
  */
 public class DataSourceConfig {

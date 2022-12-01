@@ -8,7 +8,7 @@ import java.util.List;
  * 多数据源配置接口（提供重写,注入bean）
  *
  * @author SongYanBin
- * @Copyright 2022-2099 SongYanBin All Rights Reserved.
+ * @copyright 2022-2099 SongYanBin All Rights Reserved.
  * @since 2022/11/29
  **/
 public interface MultiDatasourceService {

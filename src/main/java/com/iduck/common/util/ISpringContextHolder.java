@@ -14,7 +14,7 @@ import java.util.Map;
  * spring上下文工具
  *
  * @author songYanBin
- * @Copyright 2022-2099 SongYanBin All Rights Reserved.
+ * @copyright 2022-2099 SongYanBin All Rights Reserved.
  * @since 2022/10/28
  */
 @Component
