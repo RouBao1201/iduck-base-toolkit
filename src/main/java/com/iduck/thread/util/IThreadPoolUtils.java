@@ -14,10 +14,8 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 import java.util.concurrent.FutureTask;
 import java.util.concurrent.LinkedBlockingDeque;
-import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Consumer;
 
 /**
  * 线程池工具类
@@ -50,17 +48,7 @@ public class IThreadPoolUtils {
      * @param runnable 线程逻辑
      */
     public static void execute(Runnable runnable) {
-        getThreadPool(RunType.EXECUTE, null).execute(runnable);
-    }
-
-    /**
-     * 执行线程逻辑
-     *
-     * @param runnable    线程逻辑
-     * @param excConsumer 异常回调消费
-     */
-    public static void execute(Runnable runnable, Consumer<Throwable> excConsumer) {
-        getThreadPool(RunType.EXECUTE, excConsumer).execute(runnable);
+        getThreadPool().execute(runnable);
     }
 
     /**
@@ -71,19 +59,7 @@ public class IThreadPoolUtils {
      * @return 返回值
      */
     public static <T> Future<T> submit(Callable<T> callable) {
-        return getThreadPool(RunType.SUBMIT, null).submit(callable);
-    }
-
-    /**
-     * 执行线程逻辑
-     *
-     * @param callable    线程逻辑
-     * @param excConsumer 异常回调消费
-     * @param <T>         返回值类型
-     * @return Future<T>
-     */
-    public static <T> Future<T> submit(Callable<T> callable, Consumer<Throwable> excConsumer) {
-        return getThreadPool(RunType.SUBMIT, excConsumer).submit(callable);
+        return getThreadPool().submit(callable);
     }
 
     /**
@@ -92,7 +68,7 @@ public class IThreadPoolUtils {
      * @return 活跃线程数量
      */
     public static int activeCount() {
-        return getThreadPool(null, null).getActiveCount();
+        return getThreadPool().getActiveCount();
     }
 
     /**
@@ -101,7 +77,7 @@ public class IThreadPoolUtils {
      * 调用 shutdown() 方法后如果还有新的任务被提交，线程池则会根据拒绝策略直接拒绝后续新提交的任务
      */
     public static void shutdown() {
-        getThreadPool(null, null).shutdown();
+        getThreadPool().shutdown();
     }
 
     /**
@@ -111,7 +87,7 @@ public class IThreadPoolUtils {
      * @return 未执行的任务（可用于补偿）
      */
     public static List<Runnable> shutdownNow() {
-        return getThreadPool(null, null).shutdownNow();
+        return getThreadPool().shutdownNow();
     }
 
     /**
@@ -120,7 +96,7 @@ public class IThreadPoolUtils {
      * 并不代表线程池此时已经彻底关闭了,这仅仅代表线程池开始了关闭的流程;也就是说,此时可能线程池中依然有线程在执行任务,队列里也可能有等待被执行的任务。
      */
     public static boolean isShutdown() {
-        return getThreadPool(null, null).isShutdown();
+        return getThreadPool().isShutdown();
     }
 
     /**
@@ -130,7 +106,7 @@ public class IThreadPoolUtils {
      * @return 线程池是否征程终结
      */
     public static boolean isTerminated() {
-        return getThreadPool(null, null).isTerminated();
+        return getThreadPool().isTerminated();
     }
 
     /**
@@ -138,69 +114,45 @@ public class IThreadPoolUtils {
      *
      * @return ThreadPoolExecutor
      */
-    private static synchronized ThreadPoolExecutor getThreadPool(RunType runType, Consumer<Throwable> excConsumer) {
+    private static synchronized ThreadPoolExecutor getThreadPool() {
         if (threadPool == null) {
-            int corePoolSize = iThreadPoolUtils.config.getCorePoolSize();
-            int maximumPoolSize = iThreadPoolUtils.config.getMaximumPoolSize();
-            long keepAliveTime = iThreadPoolUtils.config.getKeepAliveTime();
-            TimeUnit unit = TimeUnit.MILLISECONDS;
-            LinkedBlockingDeque<Runnable> blockingQueue = new LinkedBlockingDeque<>(iThreadPoolUtils.config.getBlockingQueueLength());
-            ThreadPoolRejectedHandler.AbortPolicyHandler rejectedPolicy = ThreadPoolRejectedHandler.abortPolicy();
-            ThreadFactory threadFactory;
+            ThreadPoolConfig poolConfig = iThreadPoolUtils.config;
 
             /*
              * 【submit】 提交和 【execute】 线程任务捕获异常方式不同
              * execute: 线程工厂设置UncaughtExceptionHandler处理异常
              * submit: 重写线程池afterExecute方法处理异常
              */
-            if (excConsumer != null && runType == RunType.EXECUTE) {
-                // 设置线程工厂异常处理方法(execute执行)
-                threadFactory = new ThreadFactoryBuilder()
-                        .setNamePrefix(iThreadPoolUtils.config.getPoolPrefixName() + "-")
-                        .setUncaughtExceptionHandler((thread, throwable) -> {
-                            log.error("IThreadPoolUtils => Thread[{}] execute exception. Run callback method. ErrorMessage:{}.",
-                                    thread, throwable.getMessage());
-                            excConsumer.accept(throwable);
-                        }).build();
-            } else {
-                threadFactory = new ThreadFactoryBuilder()
-                        .setNamePrefix(iThreadPoolUtils.config.getPoolPrefixName() + "-")
-                        .build();
-            }
-
-            // 创建线程池（重写afterExecute方法,执行submit方法时用于异常回调）
-            if (excConsumer != null && runType == RunType.SUBMIT) {
-                threadPool = new ThreadPoolExecutor(corePoolSize, maximumPoolSize, keepAliveTime,
-                        unit, blockingQueue, threadFactory, rejectedPolicy) {
-                    @Override
-                    protected void afterExecute(Runnable r, Throwable t) {
-                        if (r instanceof FutureTask<?>) {
-                            try {
-                                ((FutureTask<?>) r).get();
-                            } catch (Exception e) {
-                                excConsumer.accept(e);
-                            }
+            threadPool = new ThreadPoolExecutor(
+                    poolConfig.getCorePoolSize(),
+                    poolConfig.getMaximumPoolSize(),
+                    poolConfig.getKeepAliveTime(),
+                    TimeUnit.MILLISECONDS,
+                    new LinkedBlockingDeque<>(poolConfig.getBlockingQueueLength()),
+                    new ThreadFactoryBuilder()
+                            .setNamePrefix(iThreadPoolUtils.config.getPoolPrefixName() + "-")
+                            .setUncaughtExceptionHandler((thread, throwable) -> log.error("IThreadPoolUtils => UncaughtExceptionHandler Thread[{}] execute exception. ErrorMessage:{}.",
+                                    thread, throwable.getMessage())).build(),
+                    ThreadPoolRejectedHandler.abortPolicy()) {
+                @Override
+                protected void afterExecute(Runnable r, Throwable t) {
+                    if (r instanceof FutureTask<?>) {
+                        try {
+                            ((FutureTask<?>) r).get();
+                        } catch (Exception e) {
+                            log.error("IThreadPoolUtils => AfterExecute. Runnable[{}] execute exception. ErrorMessage:{}.", r, e.getMessage());
                         }
                     }
-                };
-            } else {
-                // 创建线程池（默认方式,执行execute）
-                threadPool = new ThreadPoolExecutor(corePoolSize, maximumPoolSize, keepAliveTime,
-                        unit, blockingQueue, threadFactory, rejectedPolicy);
-            }
+                }
+            };
             log.info("IThreadPoolUtils => Init threadPoolExecutor {prefixName:{}, coreSize:{}, maxSize:{}, keepAliveTime:{}ms, blockQueueLength:{}}.",
-                    iThreadPoolUtils.config.getPoolPrefixName(),
-                    iThreadPoolUtils.config.getCorePoolSize(),
-                    iThreadPoolUtils.config.getMaximumPoolSize(),
-                    iThreadPoolUtils.config.getKeepAliveTime(),
-                    iThreadPoolUtils.config.getBlockingQueueLength());
+                    poolConfig.getPoolPrefixName(),
+                    poolConfig.getCorePoolSize(),
+                    poolConfig.getMaximumPoolSize(),
+                    poolConfig.getKeepAliveTime(),
+                    poolConfig.getBlockingQueueLength());
         }
         return threadPool;
-    }
-
-    enum RunType {
-        SUBMIT,
-        EXECUTE
     }
 
     private IThreadPoolUtils() {
