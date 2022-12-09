@@ -8,7 +8,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
@@ -30,17 +29,12 @@ public class IThreadPoolUtils {
 
     private static ThreadPoolExecutor threadPool = null;
 
-    private static IThreadPoolUtils iThreadPoolUtils;
-
-    @PostConstruct
-    public void init() {
-        log.info("IThreadPoolUtils => PostConstruct init...");
-        iThreadPoolUtils = this;
-        iThreadPoolUtils.config = this.config;
-    }
+    private static ThreadPoolConfig config;
 
     @Autowired
-    private ThreadPoolConfig config;
+    public void setThreadPoolConfig(ThreadPoolConfig threadPoolConfig) {
+        IThreadPoolUtils.config = threadPoolConfig;
+    }
 
     /**
      * 执行线程逻辑
@@ -110,27 +104,25 @@ public class IThreadPoolUtils {
     }
 
     /**
-     * 获取线程池
+     * 获取线程池（加锁避免多线调用时,一直创建线程池消耗资源）
      *
      * @return ThreadPoolExecutor
      */
     private static synchronized ThreadPoolExecutor getThreadPool() {
         if (threadPool == null) {
-            ThreadPoolConfig poolConfig = iThreadPoolUtils.config;
-
             /*
              * 【submit】 提交和 【execute】 线程任务捕获异常方式不同
              * execute: 线程工厂设置UncaughtExceptionHandler处理异常
              * submit: 重写线程池afterExecute方法处理异常
              */
             threadPool = new ThreadPoolExecutor(
-                    poolConfig.getCorePoolSize(),
-                    poolConfig.getMaximumPoolSize(),
-                    poolConfig.getKeepAliveTime(),
+                    config.getCorePoolSize(),
+                    config.getMaximumPoolSize(),
+                    config.getKeepAliveTime(),
                     TimeUnit.MILLISECONDS,
-                    new LinkedBlockingDeque<>(poolConfig.getBlockingQueueLength()),
+                    new LinkedBlockingDeque<>(config.getBlockingQueueLength()),
                     new ThreadFactoryBuilder()
-                            .setNamePrefix(iThreadPoolUtils.config.getPoolPrefixName() + "-")
+                            .setNamePrefix(config.getPoolPrefixName() + "-")
                             .setUncaughtExceptionHandler((thread, throwable) -> log.error("IThreadPoolUtils => UncaughtExceptionHandler Thread[{}] execute exception. ErrorMessage:{}.",
                                     thread, throwable.getMessage())).build(),
                     ThreadPoolRejectedHandler.abortPolicy()) {
@@ -146,11 +138,11 @@ public class IThreadPoolUtils {
                 }
             };
             log.info("IThreadPoolUtils => Init threadPoolExecutor {prefixName:{}, coreSize:{}, maxSize:{}, keepAliveTime:{}ms, blockQueueLength:{}}.",
-                    poolConfig.getPoolPrefixName(),
-                    poolConfig.getCorePoolSize(),
-                    poolConfig.getMaximumPoolSize(),
-                    poolConfig.getKeepAliveTime(),
-                    poolConfig.getBlockingQueueLength());
+                    config.getPoolPrefixName(),
+                    config.getCorePoolSize(),
+                    config.getMaximumPoolSize(),
+                    config.getKeepAliveTime(),
+                    config.getBlockingQueueLength());
         }
         return threadPool;
     }

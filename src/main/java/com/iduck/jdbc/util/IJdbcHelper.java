@@ -8,7 +8,6 @@ import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -26,16 +25,11 @@ import java.util.function.Consumer;
 public class IJdbcHelper {
     private static final Logger log = LoggerFactory.getLogger(IJdbcHelper.class);
 
-    private static IJdbcHelper jdbcHelper;
+    private static JdbcTemplate jdbcTemplate;
 
     @Autowired
-    private JdbcTemplate jdbcTemplate;
-
-    @PostConstruct
-    public void init() {
-        log.info("JdbcHelper => PostConstruct init...");
-        jdbcHelper = this;
-        jdbcHelper.jdbcTemplate = this.jdbcTemplate;
+    public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
+        IJdbcHelper.jdbcTemplate = jdbcTemplate;
     }
 
     /**
@@ -54,7 +48,7 @@ public class IJdbcHelper {
     public static <T> void batchInsert(String sql,
                                        List<T> dataList,
                                        DiInjectConsumer<PreparedStatement, Integer, List<T>> consumer) {
-        batchUpdate(jdbcHelper.jdbcTemplate, sql, dataList, DEFAULT_SIZE, consumer);
+        batchUpdate(jdbcTemplate, sql, dataList, DEFAULT_SIZE, consumer);
     }
 
     /**
@@ -68,7 +62,7 @@ public class IJdbcHelper {
     public static <T> void batchUpdate(String sql,
                                        List<T> dataList,
                                        DiInjectConsumer<PreparedStatement, Integer, List<T>> consumer) {
-        batchUpdate(jdbcHelper.jdbcTemplate, sql, dataList, DEFAULT_SIZE, consumer);
+        batchUpdate(jdbcTemplate, sql, dataList, DEFAULT_SIZE, consumer);
     }
 
     /**

@@ -1,6 +1,6 @@
 package com.iduck.response.util;
 
-import com.iduck.response.enuns.RespEnum;
+import com.iduck.response.enums.RespEnum;
 import com.iduck.response.model.BaseResp;
 
 import java.util.Date;

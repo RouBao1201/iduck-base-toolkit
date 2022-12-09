@@ -1,7 +1,7 @@
 jwt:
   config:
     secret-key: jwt-secret-iduck
-    expire-time: 0
+    expire-time: 1000
 cipher:
   config:
     aes:
@@ -18,4 +18,29 @@ thread-pool:
     keep-alvie-time: 60000
     core-pool-size: 10
     max-pool-size: 20
-
+server:
+  port: 10010
+spring:
+#  datasource:
+#    druid:
+#      username: root
+#      password: root
+#      driver-class-name: com.mysql.cj.jdbc.Driver
+#      url: jdbc:mysql://localhost:3306/toolkitcoms
+#      initial-size: 10
+#      max-active: 20
+#      min-idle: 10
+#      max-wait: 5000
+#      query-timeout: 100
+#      transaction-query-timeout: 100
+  redis:
+    database: 0
+    host: localhost
+    port: 6379
+    timeout: 20000
+    jedis:
+      pool:
+        max-active: 8
+        max-idle: 8
+        min-idle: 0
+        max-wait: -1

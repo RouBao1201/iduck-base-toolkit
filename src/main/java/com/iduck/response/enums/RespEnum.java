@@ -1,4 +1,4 @@
-package com.iduck.response.enuns;
+package com.iduck.response.enums;
 
 /**
  * 响应枚举

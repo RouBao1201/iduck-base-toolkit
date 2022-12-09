@@ -24,11 +24,22 @@ public class MD5Utils {
     /**
      * 加密
      *
-     * @param str 原密码
+     * @param clearStr 原密码
      * @return 密码密文
      */
-    public String encrypt(String str) {
-        if (StrUtil.isEmpty(str)) {
+    public String encrypt(String clearStr) {
+        return encrypt(clearStr, this.salt);
+    }
+
+    /**
+     * 加密
+     *
+     * @param clearStr 明文
+     * @param salt     盐值
+     * @return 密文
+     */
+    public String encrypt(String clearStr, String salt) {
+        if (StrUtil.isEmpty(clearStr)) {
             log.error("MD5Utils => The encryption password cannot be empty.");
             return "";
         }
@@ -43,7 +54,7 @@ public class MD5Utils {
         }
 
         // 使用指定的字节更新摘要（原密码+盐值）
-        md.update((str + salt).getBytes());
+        md.update((clearStr + salt).getBytes());
 
         //  产生用于生成的哈希值的字节数组。
         byte[] md5Bytes = md.digest();
@@ -54,11 +65,27 @@ public class MD5Utils {
      * 校验密码是否正确
      *
      * @param oldCipher 旧密码密文
-     * @param newStr    新密码原文
+     * @param clearStr  新密码原文
+     * @param salt      盐值
      * @return 校验结果
      */
-    public boolean verify(String oldCipher, String newStr) {
-        String newEncrypt = encrypt(newStr);
+    public boolean verify(String oldCipher, String clearStr, String salt) {
+        String newEncrypt = encrypt(clearStr, salt);
+        if (StrUtil.isEmpty(newEncrypt) || StrUtil.isEmpty(oldCipher)) {
+            return false;
+        }
+        return newEncrypt.equals(oldCipher);
+    }
+
+    /**
+     * 校验密码是否正确
+     *
+     * @param oldCipher 旧密码密文
+     * @param clearStr  新密码原文
+     * @return 校验结果
+     */
+    public boolean verify(String oldCipher, String clearStr) {
+        String newEncrypt = encrypt(clearStr);
         if (StrUtil.isEmpty(newEncrypt) || StrUtil.isEmpty(oldCipher)) {
             return false;
         }
@@ -85,5 +112,4 @@ public class MD5Utils {
     public MD5Utils(String salt) {
         this.salt = salt;
     }
-
 }

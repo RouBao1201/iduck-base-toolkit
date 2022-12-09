@@ -1,6 +1,5 @@
 package com.iduck;
 
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -12,13 +11,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @since 2022/11/24
  */
 @SpringBootApplication
-public class ToolkitApp implements CommandLineRunner {
+public class ToolkitApp {
     public static void main(String[] args) {
         SpringApplication app = new SpringApplication(ToolkitApp.class);
         app.run(args);
-    }
-
-    @Override
-    public void run(String... args) {
     }
 }

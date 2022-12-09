@@ -8,7 +8,7 @@ import com.github.pagehelper.PageInfo;
 import com.iduck.exception.model.BusinessException;
 import com.iduck.exception.util.IExceptionHandler;
 import com.iduck.request.model.BaseReq;
-import com.iduck.response.enuns.RespEnum;
+import com.iduck.response.enums.RespEnum;
 import com.iduck.page.model.BasePage;
 import com.iduck.response.model.BaseResp;
 import org.slf4j.Logger;
