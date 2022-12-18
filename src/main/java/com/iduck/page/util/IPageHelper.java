@@ -37,7 +37,7 @@ public class IPageHelper {
      * @param <T2>      响应体数据类型
      * @return 公共基础分页查询返回对象
      */
-    public static <T1 extends BaseReq, T2> BaseResp<List<T2>> doStart(ISelect select, T1 req, Class<T2> respClass) {
+    public static <T1 extends BaseReq, T2> BaseResp<List<T2>> doStart(T1 req, ISelect select, Class<T2> respClass) {
         BasePage reqPage = req.getPageInfo();
         if (ObjUtil.isEmpty(reqPage)) {
             log.error("PageHandler => The request parameter[PageInfo] cannot be null.");
